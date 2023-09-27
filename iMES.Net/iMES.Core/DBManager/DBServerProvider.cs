@@ -18,25 +18,28 @@ namespace iMES.Core.DBManager
     {
         private static readonly string _netcoredevserver = "netcoredevserver";
         private static readonly string _report = "report";
+
         private static Dictionary<string, string> ConnectionPool = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-        { 
-            //配置业务数据库连接  
+        {
+            //配置业务数据库连接
             {_netcoredevserver, AppSetting.GetSettingString("ServiceConnectingString")},
             //配置报表数据库连接
             {_report, AppSetting.GetSettingString("ReportConnectingString")}
             //系统库不用配置了，已经在appsetting.json中配置过了
           };
 
-        private static readonly string DefaultConnName = "default"; 
+        private static readonly string DefaultConnName = "default";
 
         static DBServerProvider()
         {
             SetConnection(DefaultConnName, AppSetting.DbConnectionString);
         }
+
         public static void SetConnection(string key, string val)
         {
             ConnectionPool[key] = val;
         }
+
         /// <summary>
         /// 设置默认数据库连接
         /// </summary>
@@ -55,6 +58,7 @@ namespace iMES.Core.DBManager
             }
             return key;
         }
+
         /// <summary>
         /// 获取默认数据库连接
         /// </summary>
@@ -63,6 +67,7 @@ namespace iMES.Core.DBManager
         {
             return GetConnectionString(DefaultConnName);
         }
+
         public static IDbConnection GetDbConnection(string connString = null)
         {
             if (connString == null)
@@ -80,7 +85,6 @@ namespace iMES.Core.DBManager
             return new SqlConnection(connString);
         }
 
-
         /// <summary>
         /// 扩展dapper 获取MSSQL数据库DbConnection，默认系统获取配置文件的DBType数据库类型，
         /// </summary>
@@ -89,6 +93,9 @@ namespace iMES.Core.DBManager
         /// <returns></returns>
         public static IDbConnection GetDbConnection(string connString = null, DbCurrentType dbCurrentType = DbCurrentType.Default)
         {
+            Console.WriteLine("dbcurrent type:" + dbCurrentType);
+            Console.WriteLine("dbcurrent type MySql enum:" + DbCurrentType.MySql);
+
             //默认获取DbConnection
             if (connString.IsNullOrEmpty() || DbCurrentType.Default == dbCurrentType)
             {
@@ -103,7 +110,6 @@ namespace iMES.Core.DBManager
                 return new NpgsqlConnection(connString);
             }
             return new SqlConnection(connString);
-
         }
 
         /// <summary>
@@ -121,6 +127,7 @@ namespace iMES.Core.DBManager
         {
             get { return GetEFDbContext(); }
         }
+
         /// <summary>
         /// 获取系统库(2020.08.22)
         /// </summary>
@@ -145,7 +152,6 @@ namespace iMES.Core.DBManager
             get { return Utilities.HttpContext.Current.GetService<ReportDbContext>(); ; }
         }
 
-
         /// <summary>
         /// 获取调用系统库的Dapper(2020.08.22)
         /// </summary>
@@ -153,6 +159,7 @@ namespace iMES.Core.DBManager
         {
             get
             {
+                Console.WriteLine($"default conn name:{DefaultConnName}");
                 return new SqlDapper(DefaultConnName);
             }
         }
@@ -197,7 +204,6 @@ namespace iMES.Core.DBManager
         {
             return new SqlDapper(dbName ?? DefaultConnName);
         }
-
 
         //(2020.08.22)
         public static ISqlDapper GetSqlDapper<TEntity>()
@@ -253,7 +259,6 @@ namespace iMES.Core.DBManager
             }
         }
 
-
         /// <summary>
         /// 获取系统库的字符串连接(2020.08.22)
         /// </summary>
@@ -275,6 +280,7 @@ namespace iMES.Core.DBManager
             }
             throw new Exception($"未配置[{key}]的数据库连接");
         }
+
         public static string GetContextName(string DBServer)
         {
             //  业务库
@@ -291,7 +297,5 @@ namespace iMES.Core.DBManager
                 return typeof(SysEntity).Name;
             }
         }
-
-
     }
 }

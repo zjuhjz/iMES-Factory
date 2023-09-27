@@ -50,6 +50,7 @@ namespace iMES.System.Services
             //如果只需要对某个功能生效，如编辑，则在重写编辑方法中设置 IsMultiTenancy = true;
             IsMultiTenancy = true;
         }
+
         /// <summary>
         /// WebApi登陆
         /// </summary>
@@ -87,7 +88,7 @@ namespace iMES.System.Services
                     Role_Id = user.Role_Id
                 });
                 user.Token = token;
-                responseContent.Data = new { token, userName = user.UserTrueName, img = user.HeadImageUrl ,userTrueName= user.UserName,roleName=user.RoleName };
+                responseContent.Data = new { token, userName = user.UserTrueName, img = user.HeadImageUrl, userTrueName = user.UserName, roleName = user.RoleName };
                 repository.Update(user, x => x.Token, true);
                 UserContext.Current.LogOut(user.User_Id);
 
@@ -184,7 +185,6 @@ namespace iMES.System.Services
                 string _newPwd = newPwd.EncryptDES(AppSetting.Secret.User);
                 if (userCurrentPwd == _newPwd) return webResponse.Error("新密码不能与旧密码相同");
 
-
                 repository.Update(new Sys_User
                 {
                     User_Id = userId,
@@ -212,6 +212,7 @@ namespace iMES.System.Services
             }
             return webResponse;
         }
+
         /// <summary>
         /// 个人中心获取当前用户信息
         /// </summary>
@@ -299,7 +300,6 @@ namespace iMES.System.Services
                 return responseData.OK();
             };
 
-
             ///生成6位数随机密码
             string pwd = 6.GenerateRandomNumber();
             //在AddOnExecuting之前已经对提交的数据做过验证是否为空
@@ -368,7 +368,7 @@ namespace iMES.System.Services
 
         /// <summary>
         /// 修改用户拦截过滤
-        /// 
+        ///
         /// </summary>
         /// <param name="saveModel"></param>
         /// <returns></returns>
@@ -449,29 +449,29 @@ namespace iMES.System.Services
                 WebResponseContent webResponse = new WebResponseContent(true);
 
                 try
-                 {
-                     List<Dictionary<string, object>> listDic = new List<Dictionary<string, object>>();
-                     foreach (var item in list)
-                     {
+                {
+                    List<Dictionary<string, object>> listDic = new List<Dictionary<string, object>>();
+                    foreach (var item in list)
+                    {
                         Dictionary<string, object> dic = new Dictionary<string, object>();
                         dic.Add("账号", item.UserName);
-                        dic.Add("性别", DictionaryManager.GetDictionaryList("gender",item.Gender.ToString()));
+                        dic.Add("性别", DictionaryManager.GetDictionaryList("gender", item.Gender.ToString()));
                         dic.Add("真实姓名", item.UserTrueName);
-                      
-                        dic.Add("创建时间", item.CreateDate==null ? "":item.CreateDate.ToString("yyyy-MM-dd HH:mm:sss"));
+
+                        dic.Add("创建时间", item.CreateDate == null ? "" : item.CreateDate.ToString("yyyy-MM-dd HH:mm:sss"));
                         dic.Add("创建人", item.Creator);
-                        dic.Add("是否可用", DictionaryManager.GetDictionaryList("enable", item.Enable.ToString())); 
+                        dic.Add("是否可用", DictionaryManager.GetDictionaryList("enable", item.Enable.ToString()));
                         dic.Add("修改时间", item.ModifyDate == null ? "" : item.ModifyDate.ToString("yyyy-MM-dd HH:mm:sss"));
                         listDic.Add(dic);
-                     }
-                     fileName = DateTime.Now .ToString("yyyyMMddHHmmsss") + ".xlsx";
-                     path = EPPlusHelper.ExportGeneralExcel(listDic, fileName);
-                 }
-                 catch (Exception ex)
-                 {
-                     Logger.Error($"解析表单出错：{fileName}，错误信息{ex.Message}。");
-                     return webResponse.Error("导出用户信息出错");
-                 }
+                    }
+                    fileName = DateTime.Now.ToString("yyyyMMddHHmmsss") + ".xlsx";
+                    path = EPPlusHelper.ExportGeneralExcel(listDic, fileName);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error($"解析表单出错：{fileName}，错误信息{ex.Message}。");
+                    return webResponse.Error("导出用户信息出错");
+                }
                 webResponse.Code = null;
                 return webResponse.OK(null, path);
             };
@@ -479,4 +479,3 @@ namespace iMES.System.Services
         }
     }
 }
-

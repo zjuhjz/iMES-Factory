@@ -1,5 +1,4 @@
-﻿
-using Dapper;
+﻿using Dapper;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -16,7 +15,6 @@ using iMES.Core.Enums;
 using iMES.Core.Extensions;
 using iMES.Core.Utilities;
 
-
 namespace iMES.Core.Dapper
 {
     public class SqlDapper : ISqlDapper
@@ -24,18 +22,23 @@ namespace iMES.Core.Dapper
         private string _connectionString;
         private int? commandTimeout = null;
         private DbCurrentType _dbCurrentType;
+
         public SqlDapper()
         {
             _connectionString = DBServerProvider.GetConnectionString();
+            Console.WriteLine($"connection str:{_connectionString}");
         }
+
         public SqlDapper(string connKeyName, DbCurrentType dbCurrentType)
         {
             _dbCurrentType = dbCurrentType;
             _connectionString = DBServerProvider.GetConnectionString(connKeyName);
         }
+
         public SqlDapper(string connKeyName)
         {
             _connectionString = DBServerProvider.GetConnectionString(connKeyName);
+            Console.WriteLine($"connection str:{_connectionString}");
         }
 
         private bool _transaction { get; set; }
@@ -52,7 +55,6 @@ namespace iMES.Core.Dapper
             this.commandTimeout = timeout;
             return this;
         }
-
 
         private T Execute<T>(Func<IDbConnection, IDbTransaction, T> func, bool beginTransaction = false)
         {
@@ -193,6 +195,7 @@ namespace iMES.Core.Dapper
                 return conn.Query<T>(cmd, param, dbTransaction, commandType: commandType ?? CommandType.Text, commandTimeout: commandTimeout).ToList();
             }, beginTransaction);
         }
+
         public async Task<IEnumerable<T>> QueryListAsync<T>(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false)
         {
             return await ExecuteAsync(async (conn, dbTransaction) =>
@@ -208,7 +211,6 @@ namespace iMES.Core.Dapper
                 return await conn.QueryFirstOrDefaultAsync<T>(cmd, param, dbTransaction, commandType: commandType ?? CommandType.Text, commandTimeout: commandTimeout);
             }, beginTransaction);
         }
-
 
         public T QueryFirst<T>(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false) where T : class
         {
@@ -250,7 +252,6 @@ namespace iMES.Core.Dapper
             }, beginTransaction);
         }
 
-
         public async Task<object> ExecuteScalarAsync(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false)
         {
             return await ExecuteAsync(async (conn, dbTransaction) =>
@@ -282,6 +283,7 @@ namespace iMES.Core.Dapper
                 return conn.Execute(cmd, param, dbTransaction, commandType: commandType ?? CommandType.Text, commandTimeout: commandTimeout);
             }, beginTransaction);
         }
+
         public IDataReader ExecuteReader(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false)
         {
             return Execute<IDataReader>((conn, dbTransaction) =>
@@ -290,7 +292,6 @@ namespace iMES.Core.Dapper
             }, beginTransaction);
         }
 
-
         public SqlMapper.GridReader QueryMultiple(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false)
         {
             return Execute((conn, dbTransaction) =>
@@ -298,7 +299,6 @@ namespace iMES.Core.Dapper
                 return conn.QueryMultiple(cmd, param, dbTransaction, commandType: commandType ?? CommandType.Text, commandTimeout: commandTimeout);
             }, beginTransaction);
         }
-
 
         public async Task<(IEnumerable<T1>, IEnumerable<T2>)> QueryMultipleAsync<T1, T2>(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false)
         {
@@ -353,7 +353,6 @@ namespace iMES.Core.Dapper
             }, beginTransaction);
         }
 
-
         public async Task<(IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>)> QueryMultipleAsync<T1, T2, T3>(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false)
         {
             return await ExecuteAsync(async (conn, dbTransaction) =>
@@ -364,7 +363,6 @@ namespace iMES.Core.Dapper
                 }
             }, beginTransaction);
         }
-
 
         public (List<T1>, List<T2>, List<T3>) QueryMultiple<T1, T2, T3>(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false)
         {
@@ -420,7 +418,6 @@ namespace iMES.Core.Dapper
             }, beginTransaction);
         }
 
-
         public (List<dynamic>, List<dynamic>, List<dynamic>) QueryDynamicMultiple3(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false)
         {
             return Execute((conn, dbTransaction) =>
@@ -434,7 +431,6 @@ namespace iMES.Core.Dapper
                 }
             }, beginTransaction);
         }
-
 
         public async Task<(IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>)> QueryDynamicMultipleAsync5(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false)
         {
@@ -499,7 +495,6 @@ namespace iMES.Core.Dapper
             }, beginTransaction);
         }
 
-
         public async Task<(IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>, IEnumerable<T5>)> QueryMultipleAsync<T1, T2, T3, T4, T5>(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false)
         {
             return await ExecuteAsync(async (conn, dbTransaction) =>
@@ -531,12 +526,11 @@ namespace iMES.Core.Dapper
                 }
             }, beginTransaction);
         }
-        IDbTransaction dbTransaction = null;
 
-
+        private IDbTransaction dbTransaction = null;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="entity"></param>
@@ -547,8 +541,9 @@ namespace iMES.Core.Dapper
         {
             return AddRange<T>(new T[] { entity }, addFileds, beginTransaction);
         }
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="entities"></param>
@@ -607,7 +602,6 @@ namespace iMES.Core.Dapper
             }, beginTransaction);
         }
 
-
         /// <summary>
         /// sqlserver使用的临时表参数化批量更新，mysql批量更新待发开
         /// </summary>
@@ -652,7 +646,7 @@ namespace iMES.Core.Dapper
                 {
                     paramsList.Add(item.Name + "=@" + item.Name);
                 }
-                string sqltext = $@"UPDATE { entityType.GetEntityTableName()} SET {string.Join(",", paramsList)} WHERE {entityType.GetKeyName()} = @{entityType.GetKeyName()} ;";
+                string sqltext = $@"UPDATE {entityType.GetEntityTableName()} SET {string.Join(",", paramsList)} WHERE {entityType.GetKeyName()} = @{entityType.GetKeyName()} ;";
 
                 return ExcuteNonQuery(sqltext, entities, CommandType.Text, beginTransaction);
                 // throw new Exception("mysql批量更新未实现");
@@ -687,11 +681,12 @@ namespace iMES.Core.Dapper
             }
             else
             {
-                sql = $"DELETE FROM {entityType.GetEntityTableName() } where {tKey} in ({joinKeys});";
+                sql = $"DELETE FROM {entityType.GetEntityTableName()} where {tKey} in ({joinKeys});";
             }
 
             return ExcuteNonQuery(sql, null);
         }
+
         /// <summary>
         /// 使用key批量删除
         /// </summary>
@@ -702,6 +697,7 @@ namespace iMES.Core.Dapper
         {
             return DelWithKey<T>(false, keys);
         }
+
         /// <summary>
         /// 通过Bulk批量插入
         /// </summary>
@@ -731,6 +727,7 @@ namespace iMES.Core.Dapper
                 }
             }
         }
+
         public int BulkInsert<T>(List<T> entities, string tableName = null,
             Expression<Func<T, object>> columns = null,
             SqlBulkCopyOptions? sqlBulkCopyOptions = null)
@@ -738,14 +735,17 @@ namespace iMES.Core.Dapper
             DataTable table = entities.ToDataTable(columns, false);
             return BulkInsert(table, tableName ?? typeof(T).GetEntityTableName(), sqlBulkCopyOptions);
         }
+
         public int BulkInsert(DataTable table, string tableName, SqlBulkCopyOptions? sqlBulkCopyOptions = null, string fileName = null, string tmpPath = null)
         {
+            Console.WriteLine("DB type:" + DBType.Name);
             if (!string.IsNullOrEmpty(tmpPath))
             {
                 tmpPath = tmpPath.ReplacePath();
             }
             if (DBType.Name == "MySql")
             {
+                Console.WriteLine("choose mysql");
                 return MySqlBulkInsert(table, tableName, fileName, tmpPath);
             }
 
@@ -754,6 +754,7 @@ namespace iMES.Core.Dapper
                 PGSqlBulkInsert(table, tableName);
                 return table.Rows.Count;
             }
+            Console.WriteLine("choose mssql");
             return MSSqlBulkInsert(table, tableName, sqlBulkCopyOptions ?? SqlBulkCopyOptions.KeepIdentity);
         }
 
@@ -788,7 +789,7 @@ namespace iMES.Core.Dapper
                             TableName = tableName,
                             CharacterSet = "UTF8"
                         };
-                        if (csv.IndexOf("\n")>0)
+                        if (csv.IndexOf("\n") > 0)
                         {
                             csv = csv.Replace("\n", " ");
                         }
@@ -803,7 +804,6 @@ namespace iMES.Core.Dapper
                         }
                     }
                 }
-
             }
             catch (Exception ex)
             {
@@ -812,6 +812,7 @@ namespace iMES.Core.Dapper
             return insertCount;
             //   File.Delete(path);
         }
+
         /// <summary>
         ///将DataTable转换为标准的CSV
         /// </summary>
@@ -850,6 +851,7 @@ namespace iMES.Core.Dapper
 
             return sb.ToString();
         }
+
         /// <summary>
         /// 2020.08.07增加PGSQL批量写入
         /// </summary>
@@ -880,6 +882,5 @@ namespace iMES.Core.Dapper
                 }
             }
         }
-
     }
 }

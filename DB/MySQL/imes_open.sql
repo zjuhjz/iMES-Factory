@@ -2,7 +2,8 @@
 SQLyog 企业版 - MySQL GUI v8.14 
 MySQL - 5.7.38-log : Database - imes_open
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -2076,23 +2077,39 @@ insert  into `ware_warehousebilllist`(`WareHouseBillList_Id`,`WareHouseBill_Id`,
 
 DELIMITER $$
 
-/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `Func_GetProcessLineAndProgressByID`(WorkOrderCode char(100),
+/*!50003 CREATE DEFINER=`karl`@`localhost` PROCEDURE `Func_GetProcessLineAndProgressByID`(WorkOrderCode char(100),
+
 ProcessLine_Id int)
-BEGIN
-	#Routine body goes here...
-SELECT A.*,B.ProcessName, concat((cast(IfNULL(rwo.ReportQty,0) as decimal(18,2))/cast(wo.PlanQty as decimal(18,2)) * 100),'%') PercentNum
-FROM (
-	SELECT Sequence,Process_Id from Base_ProcessLineList where ProcessLine_Id =ProcessLine_Id and processLineType = 'process'
-	UNION ALL
-	SELECT p.Sequence,b.Process_Id FROM  Base_ProcessLineList p
-		LEFT JOIN Base_ProcessLine a on p.ProcessLineDown_Id = a.ProcessLine_Id
-		LEFT JOIN Base_ProcessLineList B ON A.ProcessLine_Id = B.ProcessLine_Id
-	WHERE p.ProcessLineType = 'processLine' and b.ProcessLineType ='process' and p.ProcessLine_id = @ProcessLine_Id
-) A
-LEFT JOIN Base_Process B ON A.Process_Id = B.Process_Id
-LEFT JOIN ( SELECT Process_Id,WorkOrder_Id,SUM(ReportQty) ReportQty FROM Production_ReportWorkOrder WHERE WorkOrder_Id in (
-	select WorkOrder_Id from  Production_WorkOrder where WorkOrderCode = WorkOrderCode) GROUP BY Process_Id,WorkOrder_Id ) rwo on rwo.Process_Id = B.Process_Id 
-LEFT JOIN Production_WorkOrder wo on rwo.WorkOrder_Id = wo.WorkOrder_Id or wo.WorkOrderCode = WorkOrderCode;
+BEGIN
+
+	#Routine body goes here...
+
+SELECT A.*,B.ProcessName, concat((cast(IfNULL(rwo.ReportQty,0) as decimal(18,2))/cast(wo.PlanQty as decimal(18,2)) * 100),'%') PercentNum
+
+FROM (
+
+	SELECT Sequence,Process_Id from Base_ProcessLineList where ProcessLine_Id =ProcessLine_Id and processLineType = 'process'
+
+	UNION ALL
+
+	SELECT p.Sequence,b.Process_Id FROM  Base_ProcessLineList p
+
+		LEFT JOIN Base_ProcessLine a on p.ProcessLineDown_Id = a.ProcessLine_Id
+
+		LEFT JOIN Base_ProcessLineList B ON A.ProcessLine_Id = B.ProcessLine_Id
+
+	WHERE p.ProcessLineType = 'processLine' and b.ProcessLineType ='process' and p.ProcessLine_id = @ProcessLine_Id
+
+) A
+
+LEFT JOIN Base_Process B ON A.Process_Id = B.Process_Id
+
+LEFT JOIN ( SELECT Process_Id,WorkOrder_Id,SUM(ReportQty) ReportQty FROM Production_ReportWorkOrder WHERE WorkOrder_Id in (
+
+	select WorkOrder_Id from  Production_WorkOrder where WorkOrderCode = WorkOrderCode) GROUP BY Process_Id,WorkOrder_Id ) rwo on rwo.Process_Id = B.Process_Id 
+
+LEFT JOIN Production_WorkOrder wo on rwo.WorkOrder_Id = wo.WorkOrder_Id or wo.WorkOrderCode = WorkOrderCode;
+
 END */$$
 DELIMITER ;
 
@@ -2102,18 +2119,29 @@ DELIMITER ;
 
 DELIMITER $$
 
-/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `Func_GetProcessLineByID`(ProcessLine_Id int)
-BEGIN
-	#Routine body goes here...
-	SELECT A.*,B.ProcessName FROM (
-	SELECT Sequence,Process_Id from Base_ProcessLineList where ProcessLine_Id = ProcessLine_Id and processLineType = 'process'
-	UNION ALL
-	SELECT p.Sequence,b.Process_Id FROM  Base_ProcessLineList p
-		LEFT JOIN Base_ProcessLine a on p.ProcessLineDown_Id = a.ProcessLine_Id
-		LEFT JOIN Base_ProcessLineList B ON A.ProcessLine_Id = B.ProcessLine_Id
-	WHERE p.ProcessLineType = 'processLine' and b.ProcessLineType ='process' and p.ProcessLine_id = ProcessLine_Id
-) A
-LEFT JOIN Base_Process B ON A.Process_Id = B.Process_Id;
+/*!50003 CREATE DEFINER=`karl`@`localhost` PROCEDURE `Func_GetProcessLineByID`(ProcessLine_Id int)
+BEGIN
+
+	#Routine body goes here...
+
+	SELECT A.*,B.ProcessName FROM (
+
+	SELECT Sequence,Process_Id from Base_ProcessLineList where ProcessLine_Id = ProcessLine_Id and processLineType = 'process'
+
+	UNION ALL
+
+	SELECT p.Sequence,b.Process_Id FROM  Base_ProcessLineList p
+
+		LEFT JOIN Base_ProcessLine a on p.ProcessLineDown_Id = a.ProcessLine_Id
+
+		LEFT JOIN Base_ProcessLineList B ON A.ProcessLine_Id = B.ProcessLine_Id
+
+	WHERE p.ProcessLineType = 'processLine' and b.ProcessLineType ='process' and p.ProcessLine_id = ProcessLine_Id
+
+) A
+
+LEFT JOIN Base_Process B ON A.Process_Id = B.Process_Id;
+
 END */$$
 DELIMITER ;
 
@@ -2414,98 +2442,98 @@ DROP TABLE IF EXISTS `view_wareinoutdetail`;
 /*!50001 DROP TABLE IF EXISTS `getassembleprocess` */;
 /*!50001 DROP VIEW IF EXISTS `getassembleprocess` */;
 
-/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `getassembleprocess` AS select `a`.`AssembleWorkOrder_Id` AS `AssembleWorkOrder_Id`,count(`b`.`AssembleWorkOrderList_Id`) AS `WorkOrderQty`,ifnull(count(`d`.`WorkOrder_Id`),0) AS `FinishedQty`,(case count(`d`.`WorkOrder_Id`) when 0 then '0' else cast(cast(((cast(ifnull(count(`d`.`WorkOrder_Id`),0) as decimal(20,2)) / cast(ifnull(count(`b`.`AssembleWorkOrderList_Id`),1) as decimal(20,2))) * 100) as decimal(20,2)) as char(100) charset utf8mb4) end) AS `FormProcess` from ((`production_assembleworkorder` `a` left join `production_assembleworkorderlist` `b` on((`a`.`AssembleWorkOrder_Id` = `b`.`AssembleWorkOrder_Id`))) left join `production_workorder` `d` on(((`b`.`WorkOrderCode` = `d`.`WorkOrderCode`) and (`d`.`PlanQty` = `d`.`GoodQty`)))) group by `a`.`AssembleWorkOrder_Id` */;
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`karl`@`localhost` SQL SECURITY DEFINER VIEW `getassembleprocess` AS select `a`.`AssembleWorkOrder_Id` AS `AssembleWorkOrder_Id`,count(`b`.`AssembleWorkOrderList_Id`) AS `WorkOrderQty`,ifnull(count(`d`.`WorkOrder_Id`),0) AS `FinishedQty`,(case count(`d`.`WorkOrder_Id`) when 0 then '0' else cast(cast(((cast(ifnull(count(`d`.`WorkOrder_Id`),0) as decimal(20,2)) / cast(ifnull(count(`b`.`AssembleWorkOrderList_Id`),1) as decimal(20,2))) * 100) as decimal(20,2)) as char(100) charset utf8mb4) end) AS `FormProcess` from ((`production_assembleworkorder` `a` left join `production_assembleworkorderlist` `b` on((`a`.`AssembleWorkOrder_Id` = `b`.`AssembleWorkOrder_Id`))) left join `production_workorder` `d` on(((`b`.`WorkOrderCode` = `d`.`WorkOrderCode`) and (`d`.`PlanQty` = `d`.`GoodQty`)))) group by `a`.`AssembleWorkOrder_Id` */;
 
 /*View structure for view homeview_app_getdefectvalue */
 
 /*!50001 DROP TABLE IF EXISTS `homeview_app_getdefectvalue` */;
 /*!50001 DROP VIEW IF EXISTS `homeview_app_getdefectvalue` */;
 
-/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `homeview_app_getdefectvalue` AS select `a`.`name` AS `name`,`a`.`data` AS `data` from (select `di`.`DefectItemName` AS `name`,sum(`rwol`.`Qty`) AS `data` from (`production_reportworkorderlist` `rwol` left join `base_defectitem` `di` on((`di`.`DefectItem_Id` = `rwol`.`DefectItem`))) group by `di`.`DefectItemName`,cast(`rwol`.`CreateDate` as char(10) charset utf8mb4)) `a` where ((`a`.`data` <> 0) and (`a`.`name` is not null)) limit 10 */;
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`karl`@`localhost` SQL SECURITY DEFINER VIEW `homeview_app_getdefectvalue` AS select `a`.`name` AS `name`,`a`.`data` AS `data` from (select `di`.`DefectItemName` AS `name`,sum(`rwol`.`Qty`) AS `data` from (`production_reportworkorderlist` `rwol` left join `base_defectitem` `di` on((`di`.`DefectItem_Id` = `rwol`.`DefectItem`))) group by `di`.`DefectItemName`,cast(`rwol`.`CreateDate` as char(10) charset utf8mb4)) `a` where ((`a`.`data` <> 0) and (`a`.`name` is not null)) limit 10 */;
 
 /*View structure for view homeview_getprocessnumber */
 
 /*!50001 DROP TABLE IF EXISTS `homeview_getprocessnumber` */;
 /*!50001 DROP VIEW IF EXISTS `homeview_getprocessnumber` */;
 
-/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `homeview_getprocessnumber` AS select `p`.`ProcessName` AS `ProcessName`,sum(`wo`.`PlanQty`) AS `PlanQty`,sum(`rwo`.`GoodQty`) AS `GoodQty`,ifnull(sum(`rwo`.`NoGoodQty`),0) AS `NoGoodQty` from ((`production_reportworkorder` `rwo` left join `base_process` `p` on((`rwo`.`Process_Id` = `p`.`Process_Id`))) left join `production_workorder` `wo` on((`rwo`.`WorkOrder_Id` = `wo`.`WorkOrder_Id`))) group by `p`.`ProcessName` */;
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`karl`@`localhost` SQL SECURITY DEFINER VIEW `homeview_getprocessnumber` AS select `p`.`ProcessName` AS `ProcessName`,sum(`wo`.`PlanQty`) AS `PlanQty`,sum(`rwo`.`GoodQty`) AS `GoodQty`,ifnull(sum(`rwo`.`NoGoodQty`),0) AS `NoGoodQty` from ((`production_reportworkorder` `rwo` left join `base_process` `p` on((`rwo`.`Process_Id` = `p`.`Process_Id`))) left join `production_workorder` `wo` on((`rwo`.`WorkOrder_Id` = `wo`.`WorkOrder_Id`))) group by `p`.`ProcessName` */;
 
 /*View structure for view homeview_statisticsnumber */
 
 /*!50001 DROP TABLE IF EXISTS `homeview_statisticsnumber` */;
 /*!50001 DROP VIEW IF EXISTS `homeview_statisticsnumber` */;
 
-/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `homeview_statisticsnumber` AS select (case `wo`.`FromType` when 'SalesOrder' then '销售订单' when 'ProductPlan' then '生产计划' when 'AssembleWorkOrder' then '装配工单' end) AS `ItemName`,(case `wo`.`FromType` when 'SalesOrder' then 'rgb(25, 190, 107)' when 'ProductPlan' then 'rgb(45, 183, 245)' when 'AssembleWorkOrder' then '#f2b458' end) AS `Background`,`wo`.`FromType` AS `ItemCode`,cast(sum(`wo`.`PlanQty`) as char(100) charset utf8mb4) AS `Qty` from `production_workorder` `wo` where (`wo`.`FromType` is not null) group by `wo`.`FromType` union all select '不良品总数' AS `不良品总数`,'rgb(237, 64, 20)' AS `rgb(237, 64, 20)`,'DefectItem' AS `DefectItem`,cast(sum(`rwol`.`Qty`) as char(100) charset utf8mb4) AS `Qty` from (`production_reportworkorderlist` `rwol` left join `base_defectitem` `di` on((`di`.`DefectItem_Id` = `rwol`.`DefectItem`))) union all select '良品率' AS `良品率`,'rgb(84, 110, 122)' AS `rgb(84, 110, 122)`,'YieldRate' AS `YieldRate`,concat(cast(cast(((cast(ifnull(sum(`production_reportworkorder`.`GoodQty`),0) as decimal(20,2)) / cast(ifnull(sum(`production_reportworkorder`.`ReportQty`),1) as decimal(20,2))) * 100) as decimal(20,0)) as char(100) charset utf8mb4),'%') AS `GoodQtyPer` from `production_reportworkorder` union all select '销售订单占比' AS `销售订单占比`,'rgb(45, 183, 245)' AS `rgb(45, 183, 245)`,'SalesRate' AS `SalesRate`,concat(cast(cast(((cast(ifnull(count(`wo2`.`WorkOrder_Id`),0) as decimal(20,2)) / cast(ifnull(count(`wo`.`WorkOrder_Id`),1) as decimal(20,2))) * 100) as decimal(20,0)) as char(100) charset utf8mb4),'%') AS `SalesOrderPre` from (`production_workorder` `wo` left join `production_workorder` `wo2` on(((`wo`.`WorkOrder_Id` = `wo2`.`WorkOrder_Id`) and (`wo2`.`FromType` = 'SalesOrder')))) */;
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`karl`@`localhost` SQL SECURITY DEFINER VIEW `homeview_statisticsnumber` AS select (case `wo`.`FromType` when 'SalesOrder' then '销售订单' when 'ProductPlan' then '生产计划' when 'AssembleWorkOrder' then '装配工单' end) AS `ItemName`,(case `wo`.`FromType` when 'SalesOrder' then 'rgb(25, 190, 107)' when 'ProductPlan' then 'rgb(45, 183, 245)' when 'AssembleWorkOrder' then '#f2b458' end) AS `Background`,`wo`.`FromType` AS `ItemCode`,cast(sum(`wo`.`PlanQty`) as char(100) charset utf8mb4) AS `Qty` from `production_workorder` `wo` where (`wo`.`FromType` is not null) group by `wo`.`FromType` union all select '不良品总数' AS `不良品总数`,'rgb(237, 64, 20)' AS `rgb(237, 64, 20)`,'DefectItem' AS `DefectItem`,cast(sum(`rwol`.`Qty`) as char(100) charset utf8mb4) AS `Qty` from (`production_reportworkorderlist` `rwol` left join `base_defectitem` `di` on((`di`.`DefectItem_Id` = `rwol`.`DefectItem`))) union all select '良品率' AS `良品率`,'rgb(84, 110, 122)' AS `rgb(84, 110, 122)`,'YieldRate' AS `YieldRate`,concat(cast(cast(((cast(ifnull(sum(`production_reportworkorder`.`GoodQty`),0) as decimal(20,2)) / cast(ifnull(sum(`production_reportworkorder`.`ReportQty`),1) as decimal(20,2))) * 100) as decimal(20,0)) as char(100) charset utf8mb4),'%') AS `GoodQtyPer` from `production_reportworkorder` union all select '销售订单占比' AS `销售订单占比`,'rgb(45, 183, 245)' AS `rgb(45, 183, 245)`,'SalesRate' AS `SalesRate`,concat(cast(cast(((cast(ifnull(count(`wo2`.`WorkOrder_Id`),0) as decimal(20,2)) / cast(ifnull(count(`wo`.`WorkOrder_Id`),1) as decimal(20,2))) * 100) as decimal(20,0)) as char(100) charset utf8mb4),'%') AS `SalesOrderPre` from (`production_workorder` `wo` left join `production_workorder` `wo2` on(((`wo`.`WorkOrder_Id` = `wo2`.`WorkOrder_Id`) and (`wo2`.`FromType` = 'SalesOrder')))) */;
 
 /*View structure for view view_base_materialdetail */
 
 /*!50001 DROP TABLE IF EXISTS `view_base_materialdetail` */;
 /*!50001 DROP VIEW IF EXISTS `view_base_materialdetail` */;
 
-/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_base_materialdetail` AS select `a`.`MaterialDetail_Id` AS `MaterialDetail_Id`,`a`.`ParentProduct_Id` AS `ParentProduct_Id`,`a`.`ChildProduct_Id` AS `ChildProduct_Id`,`a`.`QuantityPer` AS `QuantityPer`,`a`.`Remark` AS `Remark`,`a`.`CreateDate` AS `CreateDate`,`a`.`CreateID` AS `CreateID`,`a`.`Creator` AS `Creator`,`a`.`Modifier` AS `Modifier`,`a`.`ModifyDate` AS `ModifyDate`,`a`.`ModifyID` AS `ModifyID`,`b`.`ProductCode` AS `PProductCode`,`b`.`ProductName` AS `PProductName`,`b`.`ProductStandard` AS `PProductStandard`,`b`.`Unit_Id` AS `PUnit_Id`,`c`.`ProductCode` AS `CProductCode`,`c`.`ProductName` AS `CProductName`,`c`.`ProductStandard` AS `CProductStandard`,`c`.`Unit_Id` AS `CUnit_Id` from ((`base_materialdetail` `a` left join `base_product` `b` on((`a`.`ParentProduct_Id` = `b`.`Product_Id`))) left join `base_product` `c` on((`a`.`ChildProduct_Id` = `c`.`Product_Id`))) */;
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`karl`@`localhost` SQL SECURITY DEFINER VIEW `view_base_materialdetail` AS select `a`.`MaterialDetail_Id` AS `MaterialDetail_Id`,`a`.`ParentProduct_Id` AS `ParentProduct_Id`,`a`.`ChildProduct_Id` AS `ChildProduct_Id`,`a`.`QuantityPer` AS `QuantityPer`,`a`.`Remark` AS `Remark`,`a`.`CreateDate` AS `CreateDate`,`a`.`CreateID` AS `CreateID`,`a`.`Creator` AS `Creator`,`a`.`Modifier` AS `Modifier`,`a`.`ModifyDate` AS `ModifyDate`,`a`.`ModifyID` AS `ModifyID`,`b`.`ProductCode` AS `PProductCode`,`b`.`ProductName` AS `PProductName`,`b`.`ProductStandard` AS `PProductStandard`,`b`.`Unit_Id` AS `PUnit_Id`,`c`.`ProductCode` AS `CProductCode`,`c`.`ProductName` AS `CProductName`,`c`.`ProductStandard` AS `CProductStandard`,`c`.`Unit_Id` AS `CUnit_Id` from ((`base_materialdetail` `a` left join `base_product` `b` on((`a`.`ParentProduct_Id` = `b`.`Product_Id`))) left join `base_product` `c` on((`a`.`ChildProduct_Id` = `c`.`Product_Id`))) */;
 
 /*View structure for view view_defectitemdistribute */
 
 /*!50001 DROP TABLE IF EXISTS `view_defectitemdistribute` */;
 /*!50001 DROP VIEW IF EXISTS `view_defectitemdistribute` */;
 
-/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_defectitemdistribute` AS select uuid() AS `ID`,`a`.`CreateDate` AS `CreateDate`,`a`.`DefectItemCode` AS `DefectItemCode`,`a`.`DefectItemName` AS `DefectItemName`,`a`.`Qty` AS `Qty`,sum(`rwol2`.`Qty`) AS `AllQty`,concat(round(((ifnull(`a`.`Qty`,0) * 100) / ifnull(sum(`rwol2`.`Qty`),1)),2),'%') AS `PassPercent` from (((select cast(`rwol`.`CreateDate` as char charset utf8mb4) AS `CreateDate`,`di`.`DefectItemCode` AS `DefectItemCode`,`di`.`DefectItemName` AS `DefectItemName`,sum(`rwol`.`Qty`) AS `Qty` from (`production_reportworkorderlist` `rwol` left join `base_defectitem` `di` on((`di`.`DefectItem_Id` = `rwol`.`DefectItem`))) group by `di`.`DefectItemCode`,`di`.`DefectItemName`,cast(`rwol`.`CreateDate` as char charset utf8mb4))) `a` left join `production_reportworkorderlist` `rwol2` on((1 = 1))) group by `a`.`DefectItemCode`,`a`.`DefectItemName`,`a`.`CreateDate`,`a`.`Qty` */;
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`karl`@`localhost` SQL SECURITY DEFINER VIEW `view_defectitemdistribute` AS select uuid() AS `ID`,`a`.`CreateDate` AS `CreateDate`,`a`.`DefectItemCode` AS `DefectItemCode`,`a`.`DefectItemName` AS `DefectItemName`,`a`.`Qty` AS `Qty`,sum(`rwol2`.`Qty`) AS `AllQty`,concat(round(((ifnull(`a`.`Qty`,0) * 100) / ifnull(sum(`rwol2`.`Qty`),1)),2),'%') AS `PassPercent` from (((select cast(`rwol`.`CreateDate` as char charset utf8mb4) AS `CreateDate`,`di`.`DefectItemCode` AS `DefectItemCode`,`di`.`DefectItemName` AS `DefectItemName`,sum(`rwol`.`Qty`) AS `Qty` from (`production_reportworkorderlist` `rwol` left join `base_defectitem` `di` on((`di`.`DefectItem_Id` = `rwol`.`DefectItem`))) group by `di`.`DefectItemCode`,`di`.`DefectItemName`,cast(`rwol`.`CreateDate` as char charset utf8mb4))) `a` left join `production_reportworkorderlist` `rwol2` on((1 = 1))) group by `a`.`DefectItemCode`,`a`.`DefectItemName`,`a`.`CreateDate`,`a`.`Qty` */;
 
 /*View structure for view view_defectitemsummary */
 
 /*!50001 DROP TABLE IF EXISTS `view_defectitemsummary` */;
 /*!50001 DROP VIEW IF EXISTS `view_defectitemsummary` */;
 
-/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_defectitemsummary` AS select uuid() AS `ID`,`wo`.`WorkOrderCode` AS `WorkOrderCode`,`rwo`.`ProductCode` AS `ProductCode`,`rwo`.`ProductName` AS `ProductName`,`rwo`.`ProductStandard` AS `ProductStandard`,`ps`.`ProcessCode` AS `ProcessCode`,`ps`.`ProcessName` AS `ProcessName`,`us`.`UserTrueName` AS `UserTrueName`,`rwo`.`StartDate` AS `StartDate`,`rwo`.`EndDate` AS `EndDate`,`rwol`.`DefectItem` AS `DefectItem`,`di`.`DefectItemName` AS `DefectItemName`,ifnull(`wo`.`PlanQty`,0) AS `PlanQty`,ifnull(`rwo`.`ReportQty`,0) AS `ReportQty`,ifnull(`rwo`.`GoodQty`,0) AS `GoodQty`,ifnull(`rwo`.`NoGoodQty`,0) AS `NoGoodQty`,(case ifnull(`rwo`.`ReportQty`,0) when '0' then '0%' when NULL then '0%' else (cast(cast(((cast(ifnull(`rwo`.`NoGoodQty`,0) as decimal(20,2)) / cast(ifnull(`rwo`.`ReportQty`,1) as decimal(20,2))) * 100) as decimal(20,2)) as char(100) charset utf8mb4) + '%') end) AS `NoPassPercent` from (((((`production_reportworkorderlist` `rwol` left join `production_reportworkorder` `rwo` on((`rwo`.`ReportWorkOrder_Id` = `rwol`.`ReportWorkOrder_Id`))) left join `production_workorder` `wo` on((`rwo`.`WorkOrder_Id` = `wo`.`WorkOrder_Id`))) left join `base_process` `ps` on((`rwo`.`Process_Id` = `ps`.`Process_Id`))) left join `sys_user` `us` on((`rwo`.`ProductUser` = `us`.`User_Id`))) left join `base_defectitem` `di` on((`rwol`.`DefectItem` = `di`.`DefectItem_Id`))) */;
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`karl`@`localhost` SQL SECURITY DEFINER VIEW `view_defectitemsummary` AS select uuid() AS `ID`,`wo`.`WorkOrderCode` AS `WorkOrderCode`,`rwo`.`ProductCode` AS `ProductCode`,`rwo`.`ProductName` AS `ProductName`,`rwo`.`ProductStandard` AS `ProductStandard`,`ps`.`ProcessCode` AS `ProcessCode`,`ps`.`ProcessName` AS `ProcessName`,`us`.`UserTrueName` AS `UserTrueName`,`rwo`.`StartDate` AS `StartDate`,`rwo`.`EndDate` AS `EndDate`,`rwol`.`DefectItem` AS `DefectItem`,`di`.`DefectItemName` AS `DefectItemName`,ifnull(`wo`.`PlanQty`,0) AS `PlanQty`,ifnull(`rwo`.`ReportQty`,0) AS `ReportQty`,ifnull(`rwo`.`GoodQty`,0) AS `GoodQty`,ifnull(`rwo`.`NoGoodQty`,0) AS `NoGoodQty`,(case ifnull(`rwo`.`ReportQty`,0) when '0' then '0%' when NULL then '0%' else (cast(cast(((cast(ifnull(`rwo`.`NoGoodQty`,0) as decimal(20,2)) / cast(ifnull(`rwo`.`ReportQty`,1) as decimal(20,2))) * 100) as decimal(20,2)) as char(100) charset utf8mb4) + '%') end) AS `NoPassPercent` from (((((`production_reportworkorderlist` `rwol` left join `production_reportworkorder` `rwo` on((`rwo`.`ReportWorkOrder_Id` = `rwol`.`ReportWorkOrder_Id`))) left join `production_workorder` `wo` on((`rwo`.`WorkOrder_Id` = `wo`.`WorkOrder_Id`))) left join `base_process` `ps` on((`rwo`.`Process_Id` = `ps`.`Process_Id`))) left join `sys_user` `us` on((`rwo`.`ProductUser` = `us`.`User_Id`))) left join `base_defectitem` `di` on((`rwol`.`DefectItem` = `di`.`DefectItem_Id`))) */;
 
 /*View structure for view view_employeeperformance */
 
 /*!50001 DROP TABLE IF EXISTS `view_employeeperformance` */;
 /*!50001 DROP VIEW IF EXISTS `view_employeeperformance` */;
 
-/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_employeeperformance` AS select uuid() AS `ID`,`rwo`.`ProductUser` AS `ProductUser`,`su`.`UserTrueName` AS `UserTrueName`,`p`.`ProcessCode` AS `ProcessCode`,`p`.`ProcessName` AS `ProcessName`,`rwo`.`ProductCode` AS `ProductCode`,`rwo`.`ProductName` AS `ProductName`,`rwo`.`ProductStandard` AS `ProductStandard`,`rwo`.`Unit_Id` AS `Unit_Id`,`sut`.`UnitName` AS `UnitName`,`rwo`.`GoodQty` AS `GoodQty`,ifnull(`rwo`.`NoGoodQty`,0) AS `NoGoodQty`,(case (`rwo`.`GoodQty` + ifnull(`rwo`.`NoGoodQty`,0)) when '0' then '0%' else (cast(cast(((cast(ifnull(`rwo`.`GoodQty`,0) as decimal(20,2)) / cast((`rwo`.`GoodQty` + ifnull(`rwo`.`NoGoodQty`,0)) as decimal(20,2))) * 100) as decimal(20,2)) as char(100) charset utf8mb4) + '%') end) AS `PassPercent`,(`rwo`.`GoodQty` + ifnull(`rwo`.`NoGoodQty`,0)) AS `AllQty`,`rwo`.`CreateDate` AS `CreateDate` from (((`production_reportworkorder` `rwo` left join `sys_user` `su` on((`rwo`.`ProductUser` = `su`.`User_Id`))) left join `base_process` `p` on((`p`.`Process_Id` = `rwo`.`Process_Id`))) left join `sys_unit` `sut` on((`rwo`.`Unit_Id` = `sut`.`Unit_Id`))) */;
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`karl`@`localhost` SQL SECURITY DEFINER VIEW `view_employeeperformance` AS select uuid() AS `ID`,`rwo`.`ProductUser` AS `ProductUser`,`su`.`UserTrueName` AS `UserTrueName`,`p`.`ProcessCode` AS `ProcessCode`,`p`.`ProcessName` AS `ProcessName`,`rwo`.`ProductCode` AS `ProductCode`,`rwo`.`ProductName` AS `ProductName`,`rwo`.`ProductStandard` AS `ProductStandard`,`rwo`.`Unit_Id` AS `Unit_Id`,`sut`.`UnitName` AS `UnitName`,`rwo`.`GoodQty` AS `GoodQty`,ifnull(`rwo`.`NoGoodQty`,0) AS `NoGoodQty`,(case (`rwo`.`GoodQty` + ifnull(`rwo`.`NoGoodQty`,0)) when '0' then '0%' else (cast(cast(((cast(ifnull(`rwo`.`GoodQty`,0) as decimal(20,2)) / cast((`rwo`.`GoodQty` + ifnull(`rwo`.`NoGoodQty`,0)) as decimal(20,2))) * 100) as decimal(20,2)) as char(100) charset utf8mb4) + '%') end) AS `PassPercent`,(`rwo`.`GoodQty` + ifnull(`rwo`.`NoGoodQty`,0)) AS `AllQty`,`rwo`.`CreateDate` AS `CreateDate` from (((`production_reportworkorder` `rwo` left join `sys_user` `su` on((`rwo`.`ProductUser` = `su`.`User_Id`))) left join `base_process` `p` on((`p`.`Process_Id` = `rwo`.`Process_Id`))) left join `sys_unit` `sut` on((`rwo`.`Unit_Id` = `sut`.`Unit_Id`))) */;
 
 /*View structure for view view_getproductstorenumber */
 
 /*!50001 DROP TABLE IF EXISTS `view_getproductstorenumber` */;
 /*!50001 DROP VIEW IF EXISTS `view_getproductstorenumber` */;
 
-/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_getproductstorenumber` AS select `a`.`product_id` AS `Product_Id`,(`a`.`inqty` - ifnull(`b`.`outqty`,0)) AS `InventoryQty` from (((select `ware_warehousebilllist`.`Product_Id` AS `product_id`,sum(`ware_warehousebilllist`.`InStoreQty`) AS `inqty` from `ware_warehousebilllist` group by `ware_warehousebilllist`.`Product_Id`)) `a` left join (select `ware_outwarehousebilllist`.`Product_Id` AS `product_id`,sum(`ware_outwarehousebilllist`.`OutStoreQty`) AS `outqty` from `ware_outwarehousebilllist` group by `ware_outwarehousebilllist`.`Product_Id`) `b` on((`a`.`product_id` = `b`.`product_id`))) union all select `ware_outwarehousebilllist`.`Product_Id` AS `product_id`,sum(-(`ware_outwarehousebilllist`.`OutStoreQty`)) AS `outqty` from `ware_outwarehousebilllist` where (not(`ware_outwarehousebilllist`.`Product_Id` in (select `ware_warehousebilllist`.`Product_Id` from `ware_warehousebilllist`))) group by `ware_outwarehousebilllist`.`Product_Id` union all select `p`.`Product_Id` AS `product_id`,0 AS `0` from `base_product` `p` where ((not(`p`.`Product_Id` in (select `ware_warehousebilllist`.`Product_Id` from `ware_warehousebilllist`))) and (not(`p`.`Product_Id` in (select `ware_outwarehousebilllist`.`Product_Id` from `ware_outwarehousebilllist`)))) */;
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`karl`@`localhost` SQL SECURITY DEFINER VIEW `view_getproductstorenumber` AS select `a`.`product_id` AS `Product_Id`,(`a`.`inqty` - ifnull(`b`.`outqty`,0)) AS `InventoryQty` from (((select `ware_warehousebilllist`.`Product_Id` AS `product_id`,sum(`ware_warehousebilllist`.`InStoreQty`) AS `inqty` from `ware_warehousebilllist` group by `ware_warehousebilllist`.`Product_Id`)) `a` left join (select `ware_outwarehousebilllist`.`Product_Id` AS `product_id`,sum(`ware_outwarehousebilllist`.`OutStoreQty`) AS `outqty` from `ware_outwarehousebilllist` group by `ware_outwarehousebilllist`.`Product_Id`) `b` on((`a`.`product_id` = `b`.`product_id`))) union all select `ware_outwarehousebilllist`.`Product_Id` AS `product_id`,sum(-(`ware_outwarehousebilllist`.`OutStoreQty`)) AS `outqty` from `ware_outwarehousebilllist` where (not(`ware_outwarehousebilllist`.`Product_Id` in (select `ware_warehousebilllist`.`Product_Id` from `ware_warehousebilllist`))) group by `ware_outwarehousebilllist`.`Product_Id` union all select `p`.`Product_Id` AS `product_id`,0 AS `0` from `base_product` `p` where ((not(`p`.`Product_Id` in (select `ware_warehousebilllist`.`Product_Id` from `ware_warehousebilllist`))) and (not(`p`.`Product_Id` in (select `ware_outwarehousebilllist`.`Product_Id` from `ware_outwarehousebilllist`)))) */;
 
 /*View structure for view view_outputstatistics */
 
 /*!50001 DROP TABLE IF EXISTS `view_outputstatistics` */;
 /*!50001 DROP VIEW IF EXISTS `view_outputstatistics` */;
 
-/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_outputstatistics` AS select uuid() AS `ID`,`wo`.`WorkOrder_Id` AS `WorkOrder_Id`,cast(`rw`.`CreateDate` as char(10) charset utf8mb4) AS `CreateDate`,sum(`wo`.`PlanQty`) AS `PlanQty`,`rw`.`ProductName` AS `ProductName`,`rw`.`ProductCode` AS `ProductCode`,`rw`.`ProductStandard` AS `ProductStandard`,`rw`.`Unit_Id` AS `Unit_Id`,sum(`rw2`.`GoodQty`) AS `GoodQty`,sum(`rw2`.`NoGoodQty`) AS `NoGoodQty` from ((`production_reportworkorder` `rw` left join `production_workorder` `wo` on((`rw`.`WorkOrder_Id` = `wo`.`WorkOrder_Id`))) left join `production_reportworkorder` `rw2` on(((`rw`.`ReportWorkOrder_Id` = `rw2`.`ReportWorkOrder_Id`) and (`rw`.`WorkOrder_Id` = `rw2`.`WorkOrder_Id`)))) where (`rw2`.`Process_Id` = (select `pll`.`Process_Id` from ((`base_product` `p` left join `base_processline` `pl` on((`p`.`Process_Id` = `pl`.`ProcessLine_Id`))) left join `base_processlinelist` `pll` on((`pl`.`ProcessLine_Id` = `pll`.`ProcessLine_Id`))) where (`p`.`Product_Id` = (select `production_reportworkorder`.`Product_Id` from `production_reportworkorder` where (`production_reportworkorder`.`WorkOrder_Id` = `rw`.`WorkOrder_Id`) limit 1)) order by `pll`.`Sequence` desc limit 1)) group by cast(`rw`.`CreateDate` as char(10) charset utf8mb4),`wo`.`WorkOrder_Id`,`rw`.`ProductName`,`rw`.`ProductCode`,`rw`.`ProductStandard`,`rw`.`Unit_Id` */;
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`karl`@`localhost` SQL SECURITY DEFINER VIEW `view_outputstatistics` AS select uuid() AS `ID`,`wo`.`WorkOrder_Id` AS `WorkOrder_Id`,cast(`rw`.`CreateDate` as char(10) charset utf8mb4) AS `CreateDate`,sum(`wo`.`PlanQty`) AS `PlanQty`,`rw`.`ProductName` AS `ProductName`,`rw`.`ProductCode` AS `ProductCode`,`rw`.`ProductStandard` AS `ProductStandard`,`rw`.`Unit_Id` AS `Unit_Id`,sum(`rw2`.`GoodQty`) AS `GoodQty`,sum(`rw2`.`NoGoodQty`) AS `NoGoodQty` from ((`production_reportworkorder` `rw` left join `production_workorder` `wo` on((`rw`.`WorkOrder_Id` = `wo`.`WorkOrder_Id`))) left join `production_reportworkorder` `rw2` on(((`rw`.`ReportWorkOrder_Id` = `rw2`.`ReportWorkOrder_Id`) and (`rw`.`WorkOrder_Id` = `rw2`.`WorkOrder_Id`)))) where (`rw2`.`Process_Id` = (select `pll`.`Process_Id` from ((`base_product` `p` left join `base_processline` `pl` on((`p`.`Process_Id` = `pl`.`ProcessLine_Id`))) left join `base_processlinelist` `pll` on((`pl`.`ProcessLine_Id` = `pll`.`ProcessLine_Id`))) where (`p`.`Product_Id` = (select `production_reportworkorder`.`Product_Id` from `production_reportworkorder` where (`production_reportworkorder`.`WorkOrder_Id` = `rw`.`WorkOrder_Id`) limit 1)) order by `pll`.`Sequence` desc limit 1)) group by cast(`rw`.`CreateDate` as char(10) charset utf8mb4),`wo`.`WorkOrder_Id`,`rw`.`ProductName`,`rw`.`ProductCode`,`rw`.`ProductStandard`,`rw`.`Unit_Id` */;
 
 /*View structure for view view_productionreport */
 
 /*!50001 DROP TABLE IF EXISTS `view_productionreport` */;
 /*!50001 DROP VIEW IF EXISTS `view_productionreport` */;
 
-/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_productionreport` AS select uuid() AS `ID`,`wo`.`ProductCode` AS `ProductCode`,`wo`.`ProductName` AS `ProductName`,`wo`.`ProductStandard` AS `ProductStandard`,`wo`.`Unit_Id` AS `Unit_Id`,`u`.`UnitName` AS `UnitName`,`wo`.`WorkOrderCode` AS `WorkOrderCode`,ifnull(`wo`.`PlanQty`,0) AS `PlanQty`,ifnull(`wo`.`RealQty`,0) AS `RealQty`,`wo`.`Status` AS `Status`,`wo`.`PlanStartDate` AS `PlanStartDate`,`wo`.`PlanEndDate` AS `PlanEndDate`,`wo`.`ActualStartDate` AS `ActualStartDate`,`wo`.`ActualEndDate` AS `ActualEndDate`,`wo`.`Remark` AS `Remark`,`wol`.`ProcessCode` AS `ProcessCode`,`wol`.`ProcessName` AS `ProcessName`,cast(`wol`.`SubmitWorkMatch` as decimal(18,2)) AS `SubmitWorkMatch`,`wol`.`PlanStartDate` AS `TaskPlanStartDate`,`wol`.`PlanEndDate` AS `TaskPlanEndDate`,`wol`.`ActualStartDate` AS `TaskActualStartDate`,`wol`.`ActualEndDate` AS `TaskActualEndDate`,ifnull(`wol`.`PlanQty`,0) AS `TaskPlanQty`,(ifnull(`wol`.`NoGoodQty`,0) + ifnull(`wol`.`NoGoodQty`,0)) AS `TaskRealQty` from ((`production_workorderlist` `wol` left join `production_workorder` `wo` on((`wol`.`WorkOrder_Id` = `wo`.`WorkOrder_Id`))) left join `sys_unit` `u` on((`wo`.`Unit_Id` = `u`.`Unit_Id`))) */;
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`karl`@`localhost` SQL SECURITY DEFINER VIEW `view_productionreport` AS select uuid() AS `ID`,`wo`.`ProductCode` AS `ProductCode`,`wo`.`ProductName` AS `ProductName`,`wo`.`ProductStandard` AS `ProductStandard`,`wo`.`Unit_Id` AS `Unit_Id`,`u`.`UnitName` AS `UnitName`,`wo`.`WorkOrderCode` AS `WorkOrderCode`,ifnull(`wo`.`PlanQty`,0) AS `PlanQty`,ifnull(`wo`.`RealQty`,0) AS `RealQty`,`wo`.`Status` AS `Status`,`wo`.`PlanStartDate` AS `PlanStartDate`,`wo`.`PlanEndDate` AS `PlanEndDate`,`wo`.`ActualStartDate` AS `ActualStartDate`,`wo`.`ActualEndDate` AS `ActualEndDate`,`wo`.`Remark` AS `Remark`,`wol`.`ProcessCode` AS `ProcessCode`,`wol`.`ProcessName` AS `ProcessName`,cast(`wol`.`SubmitWorkMatch` as decimal(18,2)) AS `SubmitWorkMatch`,`wol`.`PlanStartDate` AS `TaskPlanStartDate`,`wol`.`PlanEndDate` AS `TaskPlanEndDate`,`wol`.`ActualStartDate` AS `TaskActualStartDate`,`wol`.`ActualEndDate` AS `TaskActualEndDate`,ifnull(`wol`.`PlanQty`,0) AS `TaskPlanQty`,(ifnull(`wol`.`NoGoodQty`,0) + ifnull(`wol`.`NoGoodQty`,0)) AS `TaskRealQty` from ((`production_workorderlist` `wol` left join `production_workorder` `wo` on((`wol`.`WorkOrder_Id` = `wo`.`WorkOrder_Id`))) left join `sys_unit` `u` on((`wo`.`Unit_Id` = `u`.`Unit_Id`))) */;
 
 /*View structure for view view_salaryreport */
 
 /*!50001 DROP TABLE IF EXISTS `view_salaryreport` */;
 /*!50001 DROP VIEW IF EXISTS `view_salaryreport` */;
 
-/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_salaryreport` AS select uuid() AS `ID`,cast(`rwo`.`ReportTime` as char(10) charset utf8mb4) AS `ReportDate`,`rwo`.`ProductUser` AS `ProductUser`,`su`.`UserName` AS `UserName`,`su`.`UserTrueName` AS `UserTrueName`,count(1) AS `ReportAll`,count(`rwo5`.`ReportWorkOrder_Id`) AS `NoAlreadyAppNumber`,count(`rwo4`.`ReportWorkOrder_Id`) AS `NoAlreadyAppTime`,count(`rwo3`.`ReportWorkOrder_Id`) AS `AlreadyAppNumber`,count(`rwo2`.`ReportWorkOrder_Id`) AS `AlreadyAppTime`,sum(`rwo`.`GuessPrice`) AS `Salary` from (((((`production_reportworkorder` `rwo` left join `sys_user` `su` on((`rwo`.`ProductUser` = `su`.`User_Id`))) left join `production_reportworkorder` `rwo2` on(((`rwo2`.`ProductUser` = `su`.`User_Id`) and (ifnull(`rwo2`.`PriceType`,1) = 2) and (`rwo`.`ApproveStatus` = 2)))) left join `production_reportworkorder` `rwo3` on(((`rwo3`.`ProductUser` = `su`.`User_Id`) and (ifnull(`rwo3`.`PriceType`,1) = 1) and (`rwo`.`ApproveStatus` = 2)))) left join `production_reportworkorder` `rwo4` on(((`rwo4`.`ProductUser` = `su`.`User_Id`) and (ifnull(`rwo4`.`PriceType`,1) = 1) and (`rwo`.`ApproveStatus` = 1)))) left join `production_reportworkorder` `rwo5` on(((`rwo5`.`ProductUser` = `su`.`User_Id`) and (ifnull(`rwo5`.`PriceType`,1) = 2) and (`rwo`.`ApproveStatus` = 1)))) where ((to_days(now()) - to_days(`rwo`.`CreateDate`)) <= 30) group by `rwo`.`ProductUser`,`su`.`UserName`,`su`.`UserTrueName`,cast(`rwo`.`ReportTime` as char(10) charset utf8mb4) */;
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`karl`@`localhost` SQL SECURITY DEFINER VIEW `view_salaryreport` AS select uuid() AS `ID`,cast(`rwo`.`ReportTime` as char(10) charset utf8mb4) AS `ReportDate`,`rwo`.`ProductUser` AS `ProductUser`,`su`.`UserName` AS `UserName`,`su`.`UserTrueName` AS `UserTrueName`,count(1) AS `ReportAll`,count(`rwo5`.`ReportWorkOrder_Id`) AS `NoAlreadyAppNumber`,count(`rwo4`.`ReportWorkOrder_Id`) AS `NoAlreadyAppTime`,count(`rwo3`.`ReportWorkOrder_Id`) AS `AlreadyAppNumber`,count(`rwo2`.`ReportWorkOrder_Id`) AS `AlreadyAppTime`,sum(`rwo`.`GuessPrice`) AS `Salary` from (((((`production_reportworkorder` `rwo` left join `sys_user` `su` on((`rwo`.`ProductUser` = `su`.`User_Id`))) left join `production_reportworkorder` `rwo2` on(((`rwo2`.`ProductUser` = `su`.`User_Id`) and (ifnull(`rwo2`.`PriceType`,1) = 2) and (`rwo`.`ApproveStatus` = 2)))) left join `production_reportworkorder` `rwo3` on(((`rwo3`.`ProductUser` = `su`.`User_Id`) and (ifnull(`rwo3`.`PriceType`,1) = 1) and (`rwo`.`ApproveStatus` = 2)))) left join `production_reportworkorder` `rwo4` on(((`rwo4`.`ProductUser` = `su`.`User_Id`) and (ifnull(`rwo4`.`PriceType`,1) = 1) and (`rwo`.`ApproveStatus` = 1)))) left join `production_reportworkorder` `rwo5` on(((`rwo5`.`ProductUser` = `su`.`User_Id`) and (ifnull(`rwo5`.`PriceType`,1) = 2) and (`rwo`.`ApproveStatus` = 1)))) where ((to_days(now()) - to_days(`rwo`.`CreateDate`)) <= 30) group by `rwo`.`ProductUser`,`su`.`UserName`,`su`.`UserTrueName`,cast(`rwo`.`ReportTime` as char(10) charset utf8mb4) */;
 
 /*View structure for view view_stockbalance */
 
 /*!50001 DROP TABLE IF EXISTS `view_stockbalance` */;
 /*!50001 DROP VIEW IF EXISTS `view_stockbalance` */;
 
-/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_stockbalance` AS select `a`.`Product_Id` AS `Product_Id`,`a`.`ProductCode` AS `ProductCode`,`a`.`ProductName` AS `ProductName`,`a`.`ProductStandard` AS `ProductStandard`,`b`.`InventoryQty` AS `InventoryQty`,`a`.`Unit_Id` AS `Unit_Id`,`a`.`Process_Id` AS `Process_Id`,`a`.`MaxInventory` AS `MaxInventory`,`a`.`MinInventory` AS `MinInventory`,`a`.`SafeInventory` AS `SafeInventory`,`a`.`ProductAttribute` AS `ProductAttribute`,`a`.`CreateDate` AS `CreateDate`,`a`.`Creator` AS `Creator`,`a`.`ModifyDate` AS `ModifyDate` from (`base_product` `a` left join `view_getproductstorenumber` `b` on((`a`.`Product_Id` = `b`.`Product_Id`))) */;
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`karl`@`localhost` SQL SECURITY DEFINER VIEW `view_stockbalance` AS select `a`.`Product_Id` AS `Product_Id`,`a`.`ProductCode` AS `ProductCode`,`a`.`ProductName` AS `ProductName`,`a`.`ProductStandard` AS `ProductStandard`,`b`.`InventoryQty` AS `InventoryQty`,`a`.`Unit_Id` AS `Unit_Id`,`a`.`Process_Id` AS `Process_Id`,`a`.`MaxInventory` AS `MaxInventory`,`a`.`MinInventory` AS `MinInventory`,`a`.`SafeInventory` AS `SafeInventory`,`a`.`ProductAttribute` AS `ProductAttribute`,`a`.`CreateDate` AS `CreateDate`,`a`.`Creator` AS `Creator`,`a`.`ModifyDate` AS `ModifyDate` from (`base_product` `a` left join `view_getproductstorenumber` `b` on((`a`.`Product_Id` = `b`.`Product_Id`))) */;
 
 /*View structure for view view_wareinoutdetail */
 
 /*!50001 DROP TABLE IF EXISTS `view_wareinoutdetail` */;
 /*!50001 DROP VIEW IF EXISTS `view_wareinoutdetail` */;
 
-/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_wareinoutdetail` AS select uuid() AS `ID`,`c`.`ProductCode` AS `ProductCode`,`c`.`ProductName` AS `ProductName`,`c`.`ProductStandard` AS `ProductStandard`,`c`.`Unit_Id` AS `Unit_Id`,`a`.`InStoreQty` AS `FormQty`,`a`.`InStoreQty` AS `ChangeQty`,`d`.`WareHouseDate` AS `WareHouseDate`,'入库单' AS `FromType`,`d`.`WareHouseBillCode` AS `WareHouseBillCode`,`d`.`WareHouseBillType` AS `WareHouseBillType`,`d`.`Remark` AS `Remark`,`a`.`CreateDate` AS `CreateDate`,`a`.`Creator` AS `Creator`,`a`.`ModifyDate` AS `ModifyDate`,`c`.`MinInventory` AS `MinInventory`,`c`.`MaxInventory` AS `MaxInventory`,`c`.`SafeInventory` AS `SafeInventory`,`b`.`InventoryQty` AS `InventoryQty` from (((`ware_warehousebilllist` `a` left join `ware_warehousebill` `d` on((`a`.`WareHouseBill_Id` = `d`.`WareHouseBill_Id`))) left join `view_getproductstorenumber` `b` on((`a`.`Product_Id` = `b`.`Product_Id`))) left join `base_product` `c` on((`a`.`Product_Id` = `c`.`Product_Id`))) union all select uuid() AS `ID`,`c`.`ProductCode` AS `ProductCode`,`c`.`ProductName` AS `ProductName`,`c`.`ProductStandard` AS `ProductStandard`,`c`.`Unit_Id` AS `Unit_Id`,`a`.`OutStoreQty` AS `FormQty`,-(`a`.`OutStoreQty`) AS `ChangeQty`,`d`.`OutWareHouseDate` AS `OutWareHouseDate`,'出库单' AS `FromType`,`d`.`OutWareHouseBillCode` AS `OutWareHouseBillCode`,`d`.`OutWareHouseBillType` AS `OutWareHouseBillType`,`d`.`Remark` AS `Remark`,`a`.`CreateDate` AS `CreateDate`,`a`.`Creator` AS `Creator`,`a`.`ModifyDate` AS `ModifyDate`,`c`.`MinInventory` AS `MinInventory`,`c`.`MaxInventory` AS `MaxInventory`,`c`.`SafeInventory` AS `SafeInventory`,`b`.`InventoryQty` AS `InventoryQty` from (((`ware_outwarehousebilllist` `a` left join `ware_outwarehousebill` `d` on((`a`.`OutWareHouseBill_Id` = `d`.`OutWareHouseBill_Id`))) left join `view_getproductstorenumber` `b` on((`a`.`Product_Id` = `b`.`Product_Id`))) left join `base_product` `c` on((`a`.`Product_Id` = `c`.`Product_Id`))) */;
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`karl`@`localhost` SQL SECURITY DEFINER VIEW `view_wareinoutdetail` AS select uuid() AS `ID`,`c`.`ProductCode` AS `ProductCode`,`c`.`ProductName` AS `ProductName`,`c`.`ProductStandard` AS `ProductStandard`,`c`.`Unit_Id` AS `Unit_Id`,`a`.`InStoreQty` AS `FormQty`,`a`.`InStoreQty` AS `ChangeQty`,`d`.`WareHouseDate` AS `WareHouseDate`,'入库单' AS `FromType`,`d`.`WareHouseBillCode` AS `WareHouseBillCode`,`d`.`WareHouseBillType` AS `WareHouseBillType`,`d`.`Remark` AS `Remark`,`a`.`CreateDate` AS `CreateDate`,`a`.`Creator` AS `Creator`,`a`.`ModifyDate` AS `ModifyDate`,`c`.`MinInventory` AS `MinInventory`,`c`.`MaxInventory` AS `MaxInventory`,`c`.`SafeInventory` AS `SafeInventory`,`b`.`InventoryQty` AS `InventoryQty` from (((`ware_warehousebilllist` `a` left join `ware_warehousebill` `d` on((`a`.`WareHouseBill_Id` = `d`.`WareHouseBill_Id`))) left join `view_getproductstorenumber` `b` on((`a`.`Product_Id` = `b`.`Product_Id`))) left join `base_product` `c` on((`a`.`Product_Id` = `c`.`Product_Id`))) union all select uuid() AS `ID`,`c`.`ProductCode` AS `ProductCode`,`c`.`ProductName` AS `ProductName`,`c`.`ProductStandard` AS `ProductStandard`,`c`.`Unit_Id` AS `Unit_Id`,`a`.`OutStoreQty` AS `FormQty`,-(`a`.`OutStoreQty`) AS `ChangeQty`,`d`.`OutWareHouseDate` AS `OutWareHouseDate`,'出库单' AS `FromType`,`d`.`OutWareHouseBillCode` AS `OutWareHouseBillCode`,`d`.`OutWareHouseBillType` AS `OutWareHouseBillType`,`d`.`Remark` AS `Remark`,`a`.`CreateDate` AS `CreateDate`,`a`.`Creator` AS `Creator`,`a`.`ModifyDate` AS `ModifyDate`,`c`.`MinInventory` AS `MinInventory`,`c`.`MaxInventory` AS `MaxInventory`,`c`.`SafeInventory` AS `SafeInventory`,`b`.`InventoryQty` AS `InventoryQty` from (((`ware_outwarehousebilllist` `a` left join `ware_outwarehousebill` `d` on((`a`.`OutWareHouseBill_Id` = `d`.`OutWareHouseBill_Id`))) left join `view_getproductstorenumber` `b` on((`a`.`Product_Id` = `b`.`Product_Id`))) left join `base_product` `c` on((`a`.`Product_Id` = `c`.`Product_Id`))) */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

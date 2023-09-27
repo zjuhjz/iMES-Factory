@@ -26,6 +26,7 @@ namespace iMES.Core.Services
         public static ConcurrentQueue<Sys_Log> loggerQueueData = new ConcurrentQueue<Sys_Log>();
         private static DateTime lastClearFileDT = DateTime.Now.AddDays(-1);
         private static string _loggerPath = AppSetting.DownLoadPath + "Logger\\Queue\\";
+
         static Logger()
         {
             Task.Run(() => { Start(); });
@@ -35,10 +36,12 @@ namespace iMES.Core.Services
         {
             Info(LoggerType.Info, message);
         }
+
         public static void Info(LoggerType loggerType, string message = null)
         {
             Info(loggerType, message, null, null);
         }
+
         public static void Info(LoggerType loggerType, string requestParam, string resposeParam, string ex = null)
         {
             Add(loggerType, requestParam, resposeParam, ex, LoggerStatus.Info);
@@ -48,29 +51,34 @@ namespace iMES.Core.Services
         {
             OK(LoggerType.Success, message);
         }
+
         public static void OK(LoggerType loggerType, string message = null)
         {
             OK(loggerType, message, null, null);
         }
+
         public static void OK(LoggerType loggerType, string requestParam, string resposeParam, string ex = null)
         {
             Add(loggerType, requestParam, resposeParam, ex, LoggerStatus.Success);
         }
+
         public static void Error(string message)
         {
             Error(LoggerType.Error, message);
         }
+
         public static void Error(LoggerType loggerType, string message)
         {
             Error(loggerType, message, null, null);
         }
+
         public static void Error(LoggerType loggerType, string requestParam, string resposeParam, string ex = null)
         {
             Add(loggerType, requestParam, resposeParam, ex, LoggerStatus.Error);
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="requestParameter">请求参数</param>
         /// <param name="responseParameter">响应参数</param>
@@ -135,7 +143,7 @@ namespace iMES.Core.Services
                     //每5秒写一次数据
                     Thread.Sleep(1000);
                     if (queueTable.Rows.Count == 0) { continue; }
-
+                    // Console.WriteLine(DBServerProvider.SqlDapper.);
                     DBServerProvider.SqlDapper.BulkInsert(queueTable, "Sys_Log", SqlBulkCopyOptions.KeepIdentity, null, _loggerPath);
 
                     queueTable.Clear();
@@ -152,9 +160,7 @@ namespace iMES.Core.Services
                     WriteText(ex.Message + ex.StackTrace + ex.Source);
                     queueTable.Clear();
                 }
-
             }
-
         }
 
         private static void WriteText(string message)
@@ -199,6 +205,7 @@ namespace iMES.Core.Services
             row["Role_Id"] = log.Role_Id ?? -1;
             queueTable.Rows.Add(row);
         }
+
         private static DataTable CreateEmptyTable()
         {
             DataTable queueTable = new DataTable();
@@ -230,7 +237,7 @@ namespace iMES.Core.Services
             log.ServiceIP = context.Connection.LocalIpAddress.MapToIPv4().ToString() + ":" + context.Connection.LocalPort;
 
             log.BrowserType = context.Request.Headers["User-Agent"];
-            if (log.BrowserType.Length>190)
+            if (log.BrowserType.Length > 190)
             {
                 log.BrowserType = log.BrowserType.Substring(0, 190);
             }
