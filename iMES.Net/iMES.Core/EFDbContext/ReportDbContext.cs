@@ -12,14 +12,16 @@ namespace iMES.Core.EFDbContext
     {
         protected override string ConnectionString
         {
-            get
-            {
-                return DBServerProvider.ReportConnectingString;
-            }
+            get { return DBServerProvider.ReportConnectingString; }
         }
-        public ReportDbContext() : base() { }
 
-        public ReportDbContext(DbContextOptions<BaseDbContext> options) : base(options) { }
+        public ReportDbContext() : base()
+        {
+        }
+
+        public ReportDbContext(DbContextOptions<BaseDbContext> options) : base(options)
+        {
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -28,6 +30,7 @@ namespace iMES.Core.EFDbContext
             optionsBuilder = optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             base.OnConfiguring(optionsBuilder);
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder, typeof(ReportEntity));

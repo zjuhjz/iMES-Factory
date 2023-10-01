@@ -68,7 +68,7 @@ namespace iMES.Entity.DomainModels
         ///节点信息
         /// </summary>
         [Display(Name = "节点信息")]
-        [Column(TypeName = "nvarchar(max)")]
+        [Column(TypeName = "nvarchar(5000)")]
         [Editable(true)]
         public string NodeConfig { get; set; }
 
@@ -76,7 +76,7 @@ namespace iMES.Entity.DomainModels
         ///连接配置
         /// </summary>
         [Display(Name = "连接配置")]
-        [Column(TypeName = "nvarchar(max)")]
+        [Column(TypeName = "nvarchar(5000)")]
         [Editable(true)]
         public string LineConfig { get; set; }
 

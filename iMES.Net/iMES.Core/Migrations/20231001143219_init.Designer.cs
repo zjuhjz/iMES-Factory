@@ -11,7 +11,7 @@ using iMES.Core.EFDbContext;
 namespace iMES.Core.Migrations
 {
     [DbContext(typeof(SysDbContext))]
-    [Migration("20231001134652_init")]
+    [Migration("20231001143219_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -1507,7 +1507,7 @@ namespace iMES.Core.Migrations
                         .HasColumnType("nvarchar(60)");
 
                     b.Property<string>("FormData")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("FormId")
                         .HasColumnType("varchar(36)");
@@ -1523,7 +1523,7 @@ namespace iMES.Core.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(5500)");
 
                     b.HasKey("FormCollectionId");
 
@@ -1544,19 +1544,19 @@ namespace iMES.Core.Migrations
 
                     b.Property<string>("Creator")
                         .HasMaxLength(60)
-                        .HasColumnType("nvarchar(60)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("DaraggeOptions")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("FormConfig")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("FormFields")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(5500)");
 
                     b.Property<string>("FormOptions")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(5500)");
 
                     b.Property<string>("Modifier")
                         .HasMaxLength(60)
@@ -1569,7 +1569,7 @@ namespace iMES.Core.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("TableConfig")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -2459,7 +2459,7 @@ namespace iMES.Core.Migrations
 
                     b.Property<string>("Config")
                         .HasMaxLength(10000)
-                        .HasColumnType("nvarchar(10000)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime");
@@ -2473,11 +2473,11 @@ namespace iMES.Core.Migrations
 
                     b.Property<string>("DBServer")
                         .HasMaxLength(10000)
-                        .HasColumnType("nvarchar(10000)");
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("DbSql")
                         .HasMaxLength(10000)
-                        .HasColumnType("nvarchar(10000)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("DicName")
                         .IsRequired()
@@ -2592,7 +2592,7 @@ namespace iMES.Core.Migrations
 
                     b.Property<string>("ExceptionInfo")
                         .HasMaxLength(10000)
-                        .HasColumnType("nvarchar(10000)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("LogType")
                         .HasMaxLength(50)
@@ -2600,11 +2600,11 @@ namespace iMES.Core.Migrations
 
                     b.Property<string>("RequestParameter")
                         .HasMaxLength(10000)
-                        .HasColumnType("nvarchar(10000)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ResponseParameter")
                         .HasMaxLength(10000)
-                        .HasColumnType("nvarchar(10000)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("Role_Id")
                         .HasColumnType("int");
@@ -2618,7 +2618,7 @@ namespace iMES.Core.Migrations
 
                     b.Property<string>("Url")
                         .HasMaxLength(30000)
-                        .HasColumnType("varchar(30000)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("UserIP")
                         .HasMaxLength(100)
@@ -2626,7 +2626,7 @@ namespace iMES.Core.Migrations
 
                     b.Property<string>("UserName")
                         .HasMaxLength(30000)
-                        .HasColumnType("varchar(30000)");
+                        .HasColumnType("varchar(3000)");
 
                     b.Property<int?>("User_Id")
                         .HasColumnType("int");
@@ -2721,7 +2721,7 @@ namespace iMES.Core.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("ErrorMsg")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Id")
                         .HasColumnType("varchar(36)");
@@ -2737,7 +2737,7 @@ namespace iMES.Core.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ResponseContent")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("Result")
                         .HasColumnType("int");
@@ -2814,7 +2814,7 @@ namespace iMES.Core.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("PostData")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(5500)");
 
                     b.Property<int?>("Status")
                         .HasColumnType("int");
@@ -3332,7 +3332,7 @@ namespace iMES.Core.Migrations
                         .HasColumnType("tinyint");
 
                     b.Property<string>("LineConfig")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(5000)");
 
                     b.Property<string>("Modifier")
                         .HasMaxLength(30)
@@ -3345,7 +3345,7 @@ namespace iMES.Core.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("NodeConfig")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(5000)");
 
                     b.Property<string>("Remark")
                         .HasMaxLength(500)

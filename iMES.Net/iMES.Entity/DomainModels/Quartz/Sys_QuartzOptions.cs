@@ -121,7 +121,7 @@ namespace iMES.Entity.DomainModels
         ///post参数
         /// </summary>
         [Display(Name = "post参数")]
-        [Column(TypeName = "nvarchar(max)")]
+        [Column(TypeName = "nvarchar(5500)")]
         [Editable(true)]
         public string PostData { get; set; }
 

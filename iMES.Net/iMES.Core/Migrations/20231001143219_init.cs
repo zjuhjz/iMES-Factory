@@ -652,8 +652,9 @@ namespace iMES.Core.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     FormId = table.Column<string>(type: "varchar(36)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FormData = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Title = table.Column<string>(type: "nvarchar(5500)", nullable: true),
+                    FormData = table.Column<string>(type: "TEXT", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Creator = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: true),
                     CreateDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     CreateID = table.Column<int>(type: "int", nullable: true),
@@ -674,11 +675,14 @@ namespace iMES.Core.Migrations
                     FormId = table.Column<string>(type: "varchar(36)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Title = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
-                    DaraggeOptions = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FormOptions = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FormConfig = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FormFields = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TableConfig = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DaraggeOptions = table.Column<string>(type: "TEXT", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    FormOptions = table.Column<string>(type: "nvarchar(5500)", nullable: true),
+                    FormConfig = table.Column<string>(type: "TEXT", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    FormFields = table.Column<string>(type: "nvarchar(5500)", nullable: true),
+                    TableConfig = table.Column<string>(type: "TEXT", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Creator = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: true),
                     CreateDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     CreateID = table.Column<int>(type: "int", nullable: true),
@@ -971,8 +975,10 @@ namespace iMES.Core.Migrations
                     DicNo = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     DicName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     ParentId = table.Column<int>(type: "int", nullable: false),
-                    Config = table.Column<string>(type: "nvarchar(10000)", maxLength: 10000, nullable: true),
-                    DbSql = table.Column<string>(type: "nvarchar(10000)", maxLength: 10000, nullable: true),
+                    Config = table.Column<string>(type: "TEXT", maxLength: 10000, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DbSql = table.Column<string>(type: "TEXT", maxLength: 10000, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     DBServer = table.Column<string>(type: "nvarchar(10000)", maxLength: 10000, nullable: true),
                     OrderNo = table.Column<int>(type: "int", nullable: true),
                     Remark = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
@@ -997,15 +1003,18 @@ namespace iMES.Core.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     BeginDate = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Url = table.Column<string>(type: "varchar(30000)", maxLength: 30000, nullable: true)
+                    Url = table.Column<string>(type: "TEXT", maxLength: 30000, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     LogType = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Success = table.Column<int>(type: "int", nullable: true),
                     ElapsedTime = table.Column<int>(type: "int", nullable: true),
-                    RequestParameter = table.Column<string>(type: "nvarchar(10000)", maxLength: 10000, nullable: true),
-                    ResponseParameter = table.Column<string>(type: "nvarchar(10000)", maxLength: 10000, nullable: true),
-                    ExceptionInfo = table.Column<string>(type: "nvarchar(10000)", maxLength: 10000, nullable: true),
+                    RequestParameter = table.Column<string>(type: "TEXT", maxLength: 10000, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ResponseParameter = table.Column<string>(type: "TEXT", maxLength: 10000, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ExceptionInfo = table.Column<string>(type: "TEXT", maxLength: 10000, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     UserIP = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ServiceIP = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
@@ -1063,8 +1072,10 @@ namespace iMES.Core.Migrations
                     StratDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     EndDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     Result = table.Column<int>(type: "int", nullable: true),
-                    ResponseContent = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ErrorMsg = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ResponseContent = table.Column<string>(type: "TEXT", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ErrorMsg = table.Column<string>(type: "TEXT", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     CreateID = table.Column<int>(type: "int", nullable: true),
                     Creator = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
                     CreateDate = table.Column<DateTime>(type: "datetime", nullable: true),
@@ -1096,7 +1107,7 @@ namespace iMES.Core.Migrations
                     Describe = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
                     LastRunTime = table.Column<DateTime>(type: "datetime", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: true),
-                    PostData = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PostData = table.Column<string>(type: "nvarchar(5500)", nullable: true),
                     TimeOut = table.Column<int>(type: "int", nullable: true),
                     CreateID = table.Column<int>(type: "int", nullable: true),
                     Creator = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
@@ -1278,8 +1289,8 @@ namespace iMES.Core.Migrations
                     WorkTable = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     WorkTableName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     Enable = table.Column<sbyte>(type: "tinyint", nullable: true),
-                    NodeConfig = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LineConfig = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NodeConfig = table.Column<string>(type: "nvarchar(5000)", nullable: true),
+                    LineConfig = table.Column<string>(type: "nvarchar(5000)", nullable: true),
                     Remark = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     CreateID = table.Column<int>(type: "int", nullable: true),
                     Creator = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),

@@ -73,14 +73,14 @@ namespace iMES.Entity.DomainModels
         ///返回内容
         /// </summary>
         [Display(Name = "返回内容")]
-        [Column(TypeName = "nvarchar(max)")]
+        [Column(TypeName = "TEXT")]
         public string ResponseContent { get; set; }
 
         /// <summary>
         ///异常信息
         /// </summary>
         [Display(Name = "异常信息")]
-        [Column(TypeName = "nvarchar(max)")]
+        [Column(TypeName = "TEXT")]
         public string ErrorMsg { get; set; }
 
         /// <summary>

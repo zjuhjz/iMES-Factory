@@ -603,7 +603,7 @@ namespace iMES.Core.Extensions
             string keyType = typeinfo.GetProperties().GetKeyName(true);
             if (keyType == "varchar")
             {
-                return "varchar(65500)";
+                return "varchar(5000)";
             }
             else if (keyType != "nvarchar")
             {
@@ -611,7 +611,7 @@ namespace iMES.Core.Extensions
             }
             else
             {
-                return "nvarchar(65500)";
+                return "nvarchar(5000)";
             }
         }
 
