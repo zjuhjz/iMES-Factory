@@ -48,7 +48,7 @@ namespace iMES.Entity.DomainModels
         ///表单参数
         /// </summary>
         [Display(Name = "表单参数")]
-        [Column(TypeName = "nvarchar(5500)")]
+        [Column(TypeName = "TEXT")]
         [Editable(true)]
         public string FormOptions { get; set; }
 
