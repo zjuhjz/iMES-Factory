@@ -21,7 +21,7 @@ namespace iMES.Entity.DomainModels
        /// </summary>
        [Key]
        [Display(Name ="工具类型主键")]
-       [Column(TypeName="uniqueidentifier")]
+       [Column(TypeName="varchar(36)")]
        [Editable(true)]
        [Required(AllowEmptyStrings=false)]
        public Guid ToolTypeId { get; set; }

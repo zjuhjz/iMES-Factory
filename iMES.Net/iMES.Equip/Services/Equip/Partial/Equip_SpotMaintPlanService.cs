@@ -326,21 +326,21 @@ namespace iMES.Equip.Services
         ///点检保养计划设备清单主键
         /// </summary>
         [Display(Name = "点检保养计划设备清单主键")]
-        [Column(TypeName = "uniqueidentifier")]
+        [Column(TypeName = "varchar(36)")]
         public Guid SpotMaintPlanDeviceId { get; set; }
 
         /// <summary>
         ///点检保养计划主键
         /// </summary>
         [Display(Name = "点检保养计划主键")]
-        [Column(TypeName = "uniqueidentifier")]
+        [Column(TypeName = "varchar(36)")]
         public Guid SpotMaintPlanId { get; set; }
 
         /// <summary>
         ///设备主键
         /// </summary>
         [Display(Name = "设备主键")]
-        [Column(TypeName = "uniqueidentifier")]
+        [Column(TypeName = "varchar(36)")]
         public Guid DeviceId { get; set; }
 
         /// <summary>
@@ -433,21 +433,21 @@ namespace iMES.Equip.Services
         /// </summary>
         [Key]
         [Display(Name = "点检保养项目计划主键")]
-        [Column(TypeName = "uniqueidentifier")]
+        [Column(TypeName = "varchar(36)")]
         public Guid SpotMaintPlanProjectId { get; set; }
 
         /// <summary>
         ///点检保养项目计划ID
         /// </summary>
         [Display(Name = "点检保养项目计划ID")]
-        [Column(TypeName = "uniqueidentifier")]
+        [Column(TypeName = "varchar(36)")]
         public Guid SpotMaintPlanId { get; set; }
 
         /// <summary>
         ///项目主键
         /// </summary>
         [Display(Name = "项目主键")]
-        [Column(TypeName = "uniqueidentifier")]
+        [Column(TypeName = "varchar(36)")]
         public Guid SpotMaintenanceId { get; set; }
 
         /// <summary>

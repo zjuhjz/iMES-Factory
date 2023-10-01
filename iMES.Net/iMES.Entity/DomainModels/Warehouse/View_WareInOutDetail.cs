@@ -157,7 +157,7 @@ namespace iMES.Entity.DomainModels
        /// </summary>
        [Key]
        [Display(Name ="主键ID")]
-       [Column(TypeName="uniqueidentifier")]
+       [Column(TypeName="varchar(36)")]
        [Required(AllowEmptyStrings=false)]
        public Guid ID { get; set; }
 

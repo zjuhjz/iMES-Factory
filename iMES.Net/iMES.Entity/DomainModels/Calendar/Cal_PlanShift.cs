@@ -21,7 +21,7 @@ namespace iMES.Entity.DomainModels
        /// </summary>
        [Key]
        [Display(Name ="计划班次主键")]
-       [Column(TypeName="uniqueidentifier")]
+       [Column(TypeName="varchar(36)")]
        [Editable(true)]
        [Required(AllowEmptyStrings=false)]
        public Guid PlanShiftId { get; set; }
@@ -30,7 +30,7 @@ namespace iMES.Entity.DomainModels
        ///计划主键
        /// </summary>
        [Display(Name ="计划主键")]
-       [Column(TypeName="uniqueidentifier")]
+       [Column(TypeName="varchar(36)")]
        [Editable(true)]
        [Required(AllowEmptyStrings=false)]
        public Guid PlanId { get; set; }

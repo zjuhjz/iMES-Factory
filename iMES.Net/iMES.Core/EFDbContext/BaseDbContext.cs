@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Runtime.Loader;
 using System.Text;
 using iMES.Core.Extensions;
+using iMES.Entity.DomainModels;
 
 namespace iMES.Core.EFDbContext
 {
@@ -18,17 +19,24 @@ namespace iMES.Core.EFDbContext
         {
             set
             {
-                this.ChangeTracker.QueryTrackingBehavior = value ? QueryTrackingBehavior.TrackAll : QueryTrackingBehavior.NoTracking;
+                this.ChangeTracker.QueryTrackingBehavior =
+                    value ? QueryTrackingBehavior.TrackAll : QueryTrackingBehavior.NoTracking;
             }
         }
-        public BaseDbContext() : base() { }
-        public BaseDbContext(DbContextOptions<BaseDbContext> options) : base(options) { }
 
-        protected void UseDbType(DbContextOptionsBuilder optionsBuilder,string connectionString)
+        public BaseDbContext() : base()
+        {
+        }
+
+        public BaseDbContext(DbContextOptions<BaseDbContext> options) : base(options)
+        {
+        }
+
+        protected void UseDbType(DbContextOptionsBuilder optionsBuilder, string connectionString)
         {
             if (Const.DBType.Name == Enums.DbCurrentType.MySql.ToString())
             {
-                optionsBuilder.UseMySql(connectionString);
+                optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
             }
             else if (Const.DBType.Name == Enums.DbCurrentType.PgSql.ToString())
             {
@@ -53,20 +61,20 @@ namespace iMES.Core.EFDbContext
                 {
                     //加载指定类
                     AssemblyLoadContext.Default
-                    .LoadFromAssemblyName(new AssemblyName(_compilation.Name))
-                    .GetTypes().Where(x => x.GetTypeInfo().BaseType != null
-                    && x.BaseType == (type)).ToList()
-                    .ForEach(t => { modelBuilder.Entity(t); });
+                        .LoadFromAssemblyName(new AssemblyName(_compilation.Name))
+                        .GetTypes().Where(x => x.GetTypeInfo().BaseType != null
+                                               && x.BaseType == (type)).ToList()
+                        .ForEach(t => { modelBuilder.Entity(t); });
                 }
+
                 base.OnModelCreating(modelBuilder);
             }
             catch (Exception ex)
             {
                 string mapPath = ($"Log/").MapPath();
-                Utilities.FileHelper.WriteFile(mapPath, $"syslog_{DateTime.Now.ToString("yyyyMMddHHmmss")}.txt", ex.Message + ex.StackTrace + ex.Source);
+                Utilities.FileHelper.WriteFile(mapPath, $"syslog_{DateTime.Now.ToString("yyyyMMddHHmmss")}.txt",
+                    ex.Message + ex.StackTrace + ex.Source);
             }
-
         }
-
     }
 }

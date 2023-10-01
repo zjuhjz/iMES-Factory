@@ -21,7 +21,7 @@ namespace iMES.Entity.DomainModels
        /// </summary>
        [Key]
        [Display(Name ="Sys_WorkFlowTableStep_Id")]
-       [Column(TypeName="uniqueidentifier")]
+       [Column(TypeName="varchar(36)")]
        [Required(AllowEmptyStrings=false)]
        public Guid Sys_WorkFlowTableStep_Id { get; set; }
 
@@ -29,7 +29,7 @@ namespace iMES.Entity.DomainModels
        ///主表id
        /// </summary>
        [Display(Name ="主表id")]
-       [Column(TypeName="uniqueidentifier")]
+       [Column(TypeName="varchar(36)")]
        [Required(AllowEmptyStrings=false)]
        public Guid WorkFlowTable_Id { get; set; }
 
@@ -44,7 +44,7 @@ namespace iMES.Entity.DomainModels
        ///流程id
        /// </summary>
        [Display(Name ="流程id")]
-       [Column(TypeName="uniqueidentifier")]
+       [Column(TypeName="varchar(36)")]
        public Guid? WorkFlow_Id { get; set; }
 
        /// <summary>

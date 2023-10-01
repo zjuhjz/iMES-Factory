@@ -21,7 +21,7 @@ namespace iMES.Entity.DomainModels
        /// </summary>
        [Key]
        [Display(Name ="班组排版主键")]
-       [Column(TypeName="uniqueidentifier")]
+       [Column(TypeName="varchar(36)")]
        [Editable(true)]
        [Required(AllowEmptyStrings=false)]
        public Guid TeamShiftId { get; set; }
@@ -58,7 +58,7 @@ namespace iMES.Entity.DomainModels
        ///班次主键
        /// </summary>
        [Display(Name ="班次主键")]
-       [Column(TypeName="uniqueidentifier")]
+       [Column(TypeName="varchar(36)")]
        [Editable(true)]
        [Required(AllowEmptyStrings=false)]
        public Guid ShiftId { get; set; }
@@ -84,7 +84,7 @@ namespace iMES.Entity.DomainModels
        ///排班计划主键
        /// </summary>
        [Display(Name ="排班计划主键")]
-       [Column(TypeName="uniqueidentifier")]
+       [Column(TypeName="varchar(36)")]
        [Editable(true)]
        [Required(AllowEmptyStrings=false)]
        public Guid PlanId { get; set; }

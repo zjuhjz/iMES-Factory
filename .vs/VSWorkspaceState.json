@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\iMES.Net",
+    "\\iMES.Net\\iMES.Core",
+    "\\iMES.Net\\iMES.Core\\Filters",
+    "\\iMES.Net\\iMES.Warehouse",
+    "\\iMES.Net\\iMES.Warehouse\\Services",
+    "\\iMES.Net\\iMES.Warehouse\\Services\\Warehouse"
+  ],
+  "SelectedNode": "\\iMES.Net\\iMES.Warehouse\\Services\\Warehouse\\View_StockBalanceService.cs",
+  "PreviewInSolutionExplorer": false
+}

@@ -21,7 +21,7 @@ namespace iMES.Entity.DomainModels
        /// </summary>
        [Key]
        [Display(Name ="设备主键")]
-       [Column(TypeName="uniqueidentifier")]
+       [Column(TypeName="varchar(36)")]
        [Editable(true)]
        [Required(AllowEmptyStrings=false)]
        public Guid DeviceId { get; set; }
@@ -67,7 +67,7 @@ namespace iMES.Entity.DomainModels
        ///所属车间
        /// </summary>
        [Display(Name ="所属车间")]
-       [Column(TypeName="uniqueidentifier")]
+       [Column(TypeName="varchar(36)")]
        [Editable(true)]
        public Guid? WorkShopId { get; set; }
 
@@ -75,7 +75,7 @@ namespace iMES.Entity.DomainModels
        ///设备分类
        /// </summary>
        [Display(Name ="设备分类")]
-       [Column(TypeName="uniqueidentifier")]
+       [Column(TypeName="varchar(36)")]
        [Editable(true)]
        [Required(AllowEmptyStrings=false)]
        public Guid ParentId { get; set; }

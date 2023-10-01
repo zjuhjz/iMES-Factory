@@ -16,71 +16,103 @@ namespace iMES.Core.Dapper
         /// <param name="timeout"></param>
         /// <returns></returns>
         ISqlDapper SetTimout(int timeout);
+
         void BeginTransaction(Func<ISqlDapper, bool> action, Action<Exception> error);
         List<T> QueryList<T>(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false);
 
-        Task<IEnumerable<T>> QueryListAsync<T>(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false);
+        Task<IEnumerable<T>> QueryListAsync<T>(string cmd, object param, CommandType? commandType = null,
+            bool beginTransaction = false);
 
-        T QueryFirst<T>(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false) where T : class;
+        T QueryFirst<T>(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false)
+            where T : class;
 
-        Task<T> QueryFirstAsync<T>(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false) where T : class;
+        Task<T> QueryFirstAsync<T>(string cmd, object param, CommandType? commandType = null,
+            bool beginTransaction = false) where T : class;
 
-        Task<dynamic> QueryDynamicFirstAsync(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false);
+        Task<dynamic> QueryDynamicFirstAsync(string cmd, object param, CommandType? commandType = null,
+            bool beginTransaction = false);
 
-        dynamic QueryDynamicFirst(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false);
+        dynamic QueryDynamicFirst(string cmd, object param, CommandType? commandType = null,
+            bool beginTransaction = false);
 
-        Task<dynamic> QueryDynamicListAsync(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false);
+        Task<dynamic> QueryDynamicListAsync(string cmd, object param, CommandType? commandType = null,
+            bool beginTransaction = false);
 
-        List<dynamic> QueryDynamicList(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false);
+        List<dynamic> QueryDynamicList(string cmd, object param, CommandType? commandType = null,
+            bool beginTransaction = false);
 
 
         object ExecuteScalar(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false);
 
 
-        Task<object> ExecuteScalarAsync(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false);
+        Task<object> ExecuteScalarAsync(string cmd, object param, CommandType? commandType = null,
+            bool beginTransaction = false);
 
         int ExcuteNonQuery(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false);
 
-        Task<int> ExcuteNonQueryAsync(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false);
+        Task<int> ExcuteNonQueryAsync(string cmd, object param, CommandType? commandType = null,
+            bool beginTransaction = false);
 
-        IDataReader ExecuteReader(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false);
-        SqlMapper.GridReader QueryMultiple(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false);
+        IDataReader ExecuteReader(string cmd, object param, CommandType? commandType = null,
+            bool beginTransaction = false);
 
-        Task<(IEnumerable<T1>, IEnumerable<T2>)> QueryMultipleAsync<T1, T2>(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false);
+        SqlMapper.GridReader QueryMultiple(string cmd, object param, CommandType? commandType = null,
+            bool beginTransaction = false);
 
-        (List<T1>, List<T2>) QueryMultiple<T1, T2>(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false);
+        Task<(IEnumerable<T1>, IEnumerable<T2>)> QueryMultipleAsync<T1, T2>(string cmd, object param,
+            CommandType? commandType = null, bool beginTransaction = false);
 
-        Task<(IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>)> QueryMultipleAsync<T1, T2, T3>(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false);
+        (List<T1>, List<T2>) QueryMultiple<T1, T2>(string cmd, object param, CommandType? commandType = null,
+            bool beginTransaction = false);
 
-        (List<T1>, List<T2>, List<T3>) QueryMultiple<T1, T2, T3>(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false);
+        Task<(IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>)> QueryMultipleAsync<T1, T2, T3>(string cmd,
+            object param, CommandType? commandType = null, bool beginTransaction = false);
 
-
-        Task<(IEnumerable<dynamic>, IEnumerable<dynamic>)> QueryDynamicMultipleAsync(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false);
-
-        (List<dynamic>, List<dynamic>) QueryDynamicMultiple(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false);
-
-
-        Task<(IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>)> QueryMultipleAsync<T1, T2, T3, T4>(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false);
-
-        (List<T1>, List<T2>, List<T3>, List<T4>) QueryMultiple<T1, T2, T3, T4>(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false);
+        (List<T1>, List<T2>, List<T3>) QueryMultiple<T1, T2, T3>(string cmd, object param,
+            CommandType? commandType = null, bool beginTransaction = false);
 
 
-        Task<(IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>, IEnumerable<T5>)> QueryMultipleAsync<T1, T2, T3, T4, T5>(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false);
+        Task<(IEnumerable<dynamic>, IEnumerable<dynamic>)> QueryDynamicMultipleAsync(string cmd, object param,
+            CommandType? commandType = null, bool beginTransaction = false);
 
-        (List<T1>, List<T2>, List<T3>, List<T4>, List<T5>) QueryMultiple<T1, T2, T3, T4, T5>(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false);
-
-
-        Task<(IEnumerable<dynamic>, IEnumerable<dynamic>)> QueryDynamicMultipleAsync2(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false);
-
-        (List<dynamic>, List<dynamic>) QueryDynamicMultiple2(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false);
-
-        Task<(IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>)> QueryDynamicMultipleAsync3(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false);
-
-        (List<dynamic>, List<dynamic>, List<dynamic>) QueryDynamicMultiple3(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false);
+        (List<dynamic>, List<dynamic>) QueryDynamicMultiple(string cmd, object param, CommandType? commandType = null,
+            bool beginTransaction = false);
 
 
-        Task<(IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>)> QueryDynamicMultipleAsync5(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false);
-        (List<dynamic>, List<dynamic>, List<dynamic>, List<dynamic>, List<dynamic>) QueryDynamicMultiple5(string cmd, object param, CommandType? commandType = null, bool beginTransaction = false);
+        Task<(IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>)> QueryMultipleAsync<T1, T2, T3, T4>(
+            string cmd, object param, CommandType? commandType = null, bool beginTransaction = false);
+
+        (List<T1>, List<T2>, List<T3>, List<T4>) QueryMultiple<T1, T2, T3, T4>(string cmd, object param,
+            CommandType? commandType = null, bool beginTransaction = false);
+
+
+        Task<(IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>, IEnumerable<T5>)>
+            QueryMultipleAsync<T1, T2, T3, T4, T5>(string cmd, object param, CommandType? commandType = null,
+                bool beginTransaction = false);
+
+        (List<T1>, List<T2>, List<T3>, List<T4>, List<T5>) QueryMultiple<T1, T2, T3, T4, T5>(string cmd, object param,
+            CommandType? commandType = null, bool beginTransaction = false);
+
+
+        Task<(IEnumerable<dynamic>, IEnumerable<dynamic>)> QueryDynamicMultipleAsync2(string cmd, object param,
+            CommandType? commandType = null, bool beginTransaction = false);
+
+        (List<dynamic>, List<dynamic>) QueryDynamicMultiple2(string cmd, object param, CommandType? commandType = null,
+            bool beginTransaction = false);
+
+        Task<(IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>)> QueryDynamicMultipleAsync3(string cmd,
+            object param, CommandType? commandType = null, bool beginTransaction = false);
+
+        (List<dynamic>, List<dynamic>, List<dynamic>) QueryDynamicMultiple3(string cmd, object param,
+            CommandType? commandType = null, bool beginTransaction = false);
+
+
+        Task<(IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>,
+            IEnumerable<dynamic>)> QueryDynamicMultipleAsync5(string cmd, object param, CommandType? commandType = null,
+            bool beginTransaction = false);
+
+        (List<dynamic>, List<dynamic>, List<dynamic>, List<dynamic>, List<dynamic>) QueryDynamicMultiple5(string cmd,
+            object param, CommandType? commandType = null, bool beginTransaction = false);
 
 
         /// <summary>
@@ -92,6 +124,7 @@ namespace iMES.Core.Dapper
         /// <param name="beginTransaction">是否开启事务</param>
         /// <returns></returns>
         int Add<T>(T entity, Expression<Func<T, object>> updateFileds = null, bool beginTransaction = false);
+
         /// <summary>
         /// 
         /// </summary>
@@ -100,7 +133,8 @@ namespace iMES.Core.Dapper
         /// <param name="updateFileds">指定插入的字段</param>
         /// <param name="beginTransaction">是否开启事务</param>
         /// <returns></returns>
-        int AddRange<T>(IEnumerable<T> entities, Expression<Func<T, object>> updateFileds = null, bool beginTransaction = false);
+        int AddRange<T>(IEnumerable<T> entities, Expression<Func<T, object>> updateFileds = null,
+            bool beginTransaction = false);
 
 
         /// <summary>
@@ -121,9 +155,11 @@ namespace iMES.Core.Dapper
         /// <param name="updateFileds">指定更新的字段x=new {x.a,x.b}</param>
         /// <param name="beginTransaction">是否开启事务</param>
         /// <returns></returns>
-        int UpdateRange<T>(IEnumerable<T> entities, Expression<Func<T, object>> updateFileds = null, bool beginTransaction = false);
+        int UpdateRange<T>(IEnumerable<T> entities, Expression<Func<T, object>> updateFileds = null,
+            bool beginTransaction = false);
 
         int DelWithKey<T>(params object[] keys);
+
         int DelWithKey<T>(bool beginTransaction = false, params object[] keys);
         /// <summary>
         ///  sqlserver批量写入
@@ -136,7 +172,7 @@ namespace iMES.Core.Dapper
         /// <param name="tmpPath">默认当前下载路径</param>
         /// <param name="fileName">默认$"{DateTime.Now.ToString("yyyyMMddHHmmss")}.csv"</param>
         /// <returns></returns>
-        int BulkInsert(DataTable table, string tableName, SqlBulkCopyOptions? sqlBulkCopyOptions = null, string fileName = null, string tmpPath = null);
+        // int BulkInsert(DataTable table, string tableName, SqlBulkCopyOptions? sqlBulkCopyOptions = null, string fileName = null, string tmpPath = null);
         /// <summary>
         /// 
         /// </summary>
@@ -148,8 +184,8 @@ namespace iMES.Core.Dapper
         /// <param name="fileName"></param>
         /// <param name="tmpPath"></param>
         /// <returns></returns>
-        int BulkInsert<T>(List<T> entities, string tableName = null,
-            Expression<Func<T, object>> columns = null,
-            SqlBulkCopyOptions? sqlBulkCopyOptions = null);
+        // int BulkInsert<T>(List<T> entities, string tableName = null,
+        //     Expression<Func<T, object>> columns = null,
+        //     SqlBulkCopyOptions? sqlBulkCopyOptions = null);
     }
 }

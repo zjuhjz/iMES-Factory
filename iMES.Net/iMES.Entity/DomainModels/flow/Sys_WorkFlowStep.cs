@@ -37,7 +37,7 @@ namespace iMES.Entity.DomainModels
        /// </summary>
        [Key]
        [Display(Name ="WorkStepFlow_Id")]
-       [Column(TypeName="uniqueidentifier")]
+       [Column(TypeName="varchar(36)")]
        [Required(AllowEmptyStrings=false)]
        public Guid WorkStepFlow_Id { get; set; }
 
@@ -45,7 +45,7 @@ namespace iMES.Entity.DomainModels
        ///流程主表id
        /// </summary>
        [Display(Name ="流程主表id")]
-       [Column(TypeName="uniqueidentifier")]
+       [Column(TypeName="varchar(36)")]
        [Editable(true)]
        public Guid? WorkFlow_Id { get; set; }
 

@@ -21,7 +21,7 @@ namespace iMES.Entity.DomainModels
        /// </summary>
        [Key]
        [Display(Name ="工装夹具主键")]
-       [Column(TypeName="uniqueidentifier")]
+       [Column(TypeName="varchar(36)")]
        [Editable(true)]
        [Required(AllowEmptyStrings=false)]
        public Guid ToolId { get; set; }
@@ -67,7 +67,7 @@ namespace iMES.Entity.DomainModels
        ///工装夹具类型
        /// </summary>
        [Display(Name ="工装夹具类型")]
-       [Column(TypeName="uniqueidentifier")]
+       [Column(TypeName="varchar(36)")]
        [Editable(true)]
        public Guid? ToolTypeId { get; set; }
 

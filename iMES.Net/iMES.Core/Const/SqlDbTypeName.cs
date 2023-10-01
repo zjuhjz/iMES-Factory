@@ -22,7 +22,6 @@ namespace iMES.Core.Const
         public const string Double = "double";
         public const string Bit = "bit";
         public const string Bool = "bool";
-        public const string UniqueIdentifier = "uniqueidentifier";
-
+        public const string Uniqueidentifier = "varchar(36)";
     }
 }

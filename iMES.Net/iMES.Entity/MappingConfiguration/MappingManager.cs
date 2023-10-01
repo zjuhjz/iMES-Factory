@@ -7,7 +7,6 @@ using System.Reflection;
 
 namespace iMES.Entity.MappingConfiguration
 {
-
     public interface IEntityMappingConfiguration
     {
         void Map(ModelBuilder b);
@@ -32,7 +31,8 @@ namespace iMES.Entity.MappingConfiguration
     {
         private static IEnumerable<Type> GetMappingTypes(this Assembly assembly, Type mappingInterface)
         {
-            return assembly.GetTypes().Where(x => !x.IsAbstract && x.GetInterfaces().Any(y => y.GetTypeInfo().IsGenericType && y.GetGenericTypeDefinition() == mappingInterface));
+            return assembly.GetTypes().Where(x => !x.IsAbstract && x.GetInterfaces().Any(y =>
+                y.GetTypeInfo().IsGenericType && y.GetGenericTypeDefinition() == mappingInterface));
         }
 
         public static void AddEntityConfigurationsFromAssembly(this ModelBuilder modelBuilder, Assembly assembly)
@@ -126,4 +126,3 @@ namespace iMES.Entity.MappingConfiguration
 //        return conventionSet;
 //    }
 //}
-

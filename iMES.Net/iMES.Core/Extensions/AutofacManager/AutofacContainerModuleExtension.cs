@@ -30,7 +30,8 @@ namespace iMES.Core.Extensions
     public static class AutofacContainerModuleExtension
     {
         //  private static bool _isMysql = false;
-        public static IServiceCollection AddModule(this IServiceCollection services, ContainerBuilder builder, IConfiguration configuration)
+        public static IServiceCollection AddModule(this IServiceCollection services, ContainerBuilder builder,
+            IConfiguration configuration)
         {
             //services.AddSession();
             //services.AddMemoryCache();
@@ -40,7 +41,7 @@ namespace iMES.Core.Extensions
             var compilationLibrary = DependencyContext.Default
                 .RuntimeLibraries
                 .Where(x => !x.Serviceable
-                && x.Type == "project")
+                            && x.Type == "project")
                 .ToList();
             var count1 = compilationLibrary.Count;
             List<Assembly> assemblyList = new List<Assembly>();
@@ -49,17 +50,19 @@ namespace iMES.Core.Extensions
             {
                 try
                 {
-                    assemblyList.Add(AssemblyLoadContext.Default.LoadFromAssemblyName(new AssemblyName(_compilation.Name)));
+                    assemblyList.Add(
+                        AssemblyLoadContext.Default.LoadFromAssemblyName(new AssemblyName(_compilation.Name)));
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(_compilation.Name + ex.Message);
                 }
             }
+
             builder.RegisterAssemblyTypes(assemblyList.ToArray())
-             .Where(type => baseType.IsAssignableFrom(type) && !type.IsAbstract)
-             .AsSelf().AsImplementedInterfaces()
-             .InstancePerLifetimeScope();
+                .Where(type => baseType.IsAssignableFrom(type) && !type.IsAbstract)
+                .AsSelf().AsImplementedInterfaces()
+                .InstancePerLifetimeScope();
             builder.RegisterType<UserContext>().InstancePerLifetimeScope();
             builder.RegisterType<ActionObserver>().InstancePerLifetimeScope();
             //model校验结果
@@ -74,22 +77,32 @@ namespace iMES.Core.Extensions
 
                 //services.AddDbContext<SysDbContext>();
                 //mysql8.x的版本使用Pomelo.EntityFrameworkCore.MySql 3.1会产生异常，需要在字符串连接上添加allowPublicKeyRetrieval=true
-                services.AddDbContextPool<SysDbContext>(optionsBuilder => { optionsBuilder.UseMySql(connectionString); }, 64);
-                services.AddDbContextPool<ServiceDbContext>(optionsBuilder => { optionsBuilder.UseMySql(connectionString); }, 64);
-                services.AddDbContextPool<ReportDbContext>(optionsBuilder => { optionsBuilder.UseMySql(connectionString); }, 64);
+                services.AddDbContextPool<SysDbContext>(
+                    optionsBuilder => { optionsBuilder.UseMySql(ServerVersion.AutoDetect(connectionString)); }, 64);
+                services.AddDbContextPool<ServiceDbContext>(
+                    optionsBuilder => { optionsBuilder.UseMySql(ServerVersion.AutoDetect(connectionString)); }, 64);
+                services.AddDbContextPool<ReportDbContext>(
+                    optionsBuilder => { optionsBuilder.UseMySql(ServerVersion.AutoDetect(connectionString)); }, 64);
             }
             else if (DBType.Name == DbCurrentType.PgSql.ToString())
             {
-                services.AddDbContextPool<SysDbContext>(optionsBuilder => { optionsBuilder.UseNpgsql(connectionString); }, 64);
-                services.AddDbContextPool<ServiceDbContext>(optionsBuilder => { optionsBuilder.UseNpgsql(connectionString); }, 64);
-                services.AddDbContextPool<ReportDbContext>(optionsBuilder => { optionsBuilder.UseNpgsql(connectionString); }, 64);
+                services.AddDbContextPool<SysDbContext>(
+                    optionsBuilder => { optionsBuilder.UseNpgsql(connectionString); }, 64);
+                services.AddDbContextPool<ServiceDbContext>(
+                    optionsBuilder => { optionsBuilder.UseNpgsql(connectionString); }, 64);
+                services.AddDbContextPool<ReportDbContext>(
+                    optionsBuilder => { optionsBuilder.UseNpgsql(connectionString); }, 64);
             }
             else
             {
-                services.AddDbContextPool<SysDbContext>(optionsBuilder => { optionsBuilder.UseSqlServer(connectionString); }, 64);
-                services.AddDbContextPool<ServiceDbContext>(optionsBuilder => { optionsBuilder.UseSqlServer(connectionString); }, 64);
-                services.AddDbContextPool<ReportDbContext>(optionsBuilder => { optionsBuilder.UseSqlServer(connectionString); }, 64);
+                services.AddDbContextPool<SysDbContext>(
+                    optionsBuilder => { optionsBuilder.UseSqlServer(connectionString); }, 64);
+                services.AddDbContextPool<ServiceDbContext>(
+                    optionsBuilder => { optionsBuilder.UseSqlServer(connectionString); }, 64);
+                services.AddDbContextPool<ReportDbContext>(
+                    optionsBuilder => { optionsBuilder.UseSqlServer(connectionString); }, 64);
             }
+
             //启用缓存
             if (AppSetting.UseRedis)
             {
@@ -99,6 +112,7 @@ namespace iMES.Core.Extensions
             {
                 builder.RegisterType<MemoryCacheService>().As<ICacheService>().SingleInstance();
             }
+
             //kafka注入
             //if (AppSetting.Kafka.UseConsumer)
             //    builder.RegisterType<KafkaConsumer<string, string>>().As<IKafkaConsumer<string, string>>().SingleInstance();
@@ -106,6 +120,5 @@ namespace iMES.Core.Extensions
             //    builder.RegisterType<KafkaProducer<string, string>>().As<IKafkaProducer<string, string>>().SingleInstance();
             return services;
         }
-
     }
 }

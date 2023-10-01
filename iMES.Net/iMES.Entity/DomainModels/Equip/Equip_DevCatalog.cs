@@ -21,7 +21,7 @@ namespace iMES.Entity.DomainModels
        /// </summary>
        [Key]
        [Display(Name ="设备类型主键")]
-       [Column(TypeName="uniqueidentifier")]
+       [Column(TypeName="varchar(36)")]
        [Editable(true)]
        [Required(AllowEmptyStrings=false)]
        public Guid DevCatalogId { get; set; }
@@ -58,7 +58,7 @@ namespace iMES.Entity.DomainModels
        ///父分类
        /// </summary>
        [Display(Name ="父分类")]
-       [Column(TypeName="uniqueidentifier")]
+       [Column(TypeName="varchar(36)")]
        [Editable(true)]
        public Guid? ParentId { get; set; }
 

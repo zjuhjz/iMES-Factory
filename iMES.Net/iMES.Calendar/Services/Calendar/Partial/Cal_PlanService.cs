@@ -583,7 +583,7 @@ namespace iMES.Calendar.Services
         /// </summary>
         [Key]
         [Display(Name = "计划班次主键")]
-        [Column(TypeName = "uniqueidentifier")]
+        [Column(TypeName = "varchar(36)")]
         [Editable(true)]
         public Guid PlanShiftId { get; set; }
 
@@ -591,7 +591,7 @@ namespace iMES.Calendar.Services
         ///计划主键
         /// </summary>
         [Display(Name = "计划主键")]
-        [Column(TypeName = "uniqueidentifier")]
+        [Column(TypeName = "varchar(36)")]
         [Editable(true)]
         public Guid PlanId { get; set; }
 
@@ -687,7 +687,7 @@ namespace iMES.Calendar.Services
         /// </summary>
         [Key]
         [Display(Name = "计划班组主键")]
-        [Column(TypeName = "uniqueidentifier")]
+        [Column(TypeName = "varchar(36)")]
         [Editable(true)]
         public Guid PlanTeamId { get; set; }
 
@@ -695,7 +695,7 @@ namespace iMES.Calendar.Services
         ///计划主键
         /// </summary>
         [Display(Name = "计划主键")]
-        [Column(TypeName = "uniqueidentifier")]
+        [Column(TypeName = "varchar(36)")]
         [Editable(true)]
         public Guid PlanId { get; set; }
 
@@ -703,7 +703,7 @@ namespace iMES.Calendar.Services
         ///班组主键
         /// </summary>
         [Display(Name = "班组主键")]
-        [Column(TypeName = "uniqueidentifier")]
+        [Column(TypeName = "varchar(36)")]
         [Editable(true)]
         public Guid TeamId { get; set; }
 

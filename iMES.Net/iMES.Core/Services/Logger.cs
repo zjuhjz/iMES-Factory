@@ -26,6 +26,7 @@ namespace iMES.Core.Services
         public static ConcurrentQueue<Sys_Log> loggerQueueData = new ConcurrentQueue<Sys_Log>();
         private static DateTime lastClearFileDT = DateTime.Now.AddDays(-1);
         private static string _loggerPath = AppSetting.DownLoadPath + "Logger\\Queue\\";
+
         static Logger()
         {
             Task.Run(() => { Start(); });
@@ -35,10 +36,12 @@ namespace iMES.Core.Services
         {
             Info(LoggerType.Info, message);
         }
+
         public static void Info(LoggerType loggerType, string message = null)
         {
             Info(loggerType, message, null, null);
         }
+
         public static void Info(LoggerType loggerType, string requestParam, string resposeParam, string ex = null)
         {
             Add(loggerType, requestParam, resposeParam, ex, LoggerStatus.Info);
@@ -48,22 +51,27 @@ namespace iMES.Core.Services
         {
             OK(LoggerType.Success, message);
         }
+
         public static void OK(LoggerType loggerType, string message = null)
         {
             OK(loggerType, message, null, null);
         }
+
         public static void OK(LoggerType loggerType, string requestParam, string resposeParam, string ex = null)
         {
             Add(loggerType, requestParam, resposeParam, ex, LoggerStatus.Success);
         }
+
         public static void Error(string message)
         {
             Error(LoggerType.Error, message);
         }
+
         public static void Error(LoggerType loggerType, string message)
         {
             Error(loggerType, message, null, null);
         }
+
         public static void Error(LoggerType loggerType, string requestParam, string resposeParam, string ex = null)
         {
             Add(loggerType, requestParam, resposeParam, ex, LoggerStatus.Error);
@@ -76,19 +84,23 @@ namespace iMES.Core.Services
         /// <param name="responseParameter">响应参数</param>
         /// <param name="success">响应结果1、成功,2、异常，0、其他</param>
         /// <param name="userInfo">用户数据</param>
-        private static void Add(LoggerType loggerType, string requestParameter, string responseParameter, string ex, LoggerStatus status)
+        private static void Add(LoggerType loggerType, string requestParameter, string responseParameter, string ex,
+            LoggerStatus status)
         {
             Sys_Log log = null;
             try
             {
                 HttpContext context = Utilities.HttpContext.Current;
                 if (context.Request.Method == "OPTIONS") return;
-                ActionObserver cctionObserver = (context.RequestServices.GetService(typeof(ActionObserver)) as ActionObserver);
+                ActionObserver cctionObserver =
+                    (context.RequestServices.GetService(typeof(ActionObserver)) as ActionObserver);
                 if (context == null)
                 {
-                    WriteText($"未获取到httpcontext信息,type:{loggerType.ToString()},reqParam:{requestParameter},respParam:{responseParameter},ex:{ex},success:{status.ToString()}");
+                    WriteText(
+                        $"未获取到httpcontext信息,type:{loggerType.ToString()},reqParam:{requestParameter},respParam:{responseParameter},ex:{ex},success:{status.ToString()}");
                     return;
                 }
+
                 UserInfo userInfo = UserContext.Current.UserInfo;
                 log = new Sys_Log()
                 {
@@ -118,6 +130,7 @@ namespace iMES.Core.Services
                     ExceptionInfo = ex + exception.Message
                 };
             }
+
             loggerQueueData.Enqueue(log);
         }
 
@@ -130,13 +143,21 @@ namespace iMES.Core.Services
                 {
                     if (loggerQueueData.Count() > 0 && queueTable.Rows.Count < 500)
                     {
-                        DequeueToTable(queueTable); continue;
+                        DequeueToTable(queueTable);
+                        continue;
                     }
+
                     //每5秒写一次数据
                     Thread.Sleep(1000);
-                    if (queueTable.Rows.Count == 0) { continue; }
+                    if (queueTable.Rows.Count == 0)
+                    {
+                        continue;
+                    }
 
-                    DBServerProvider.SqlDapper.BulkInsert(queueTable, "Sys_Log", SqlBulkCopyOptions.KeepIdentity, null, _loggerPath);
+                    Console.WriteLine(queueTable.ToString());
+
+                    // TODO 2023.9.30 优化批量插入
+                    // DBServerProvider.SqlDapper.BulkInsert<Sys_Log>(queueTable.,  SqlBulkCopyOptions.KeepIdentity, null, _loggerPath);
 
                     queueTable.Clear();
 
@@ -152,16 +173,15 @@ namespace iMES.Core.Services
                     WriteText(ex.Message + ex.StackTrace + ex.Source);
                     queueTable.Clear();
                 }
-
             }
-
         }
 
         private static void WriteText(string message)
         {
             try
             {
-                Utilities.FileHelper.WriteFile(_loggerPath + "WriteError\\", $"{DateTime.Now.ToString("yyyyMMdd")}.txt", message + "\r\n");
+                Utilities.FileHelper.WriteFile(_loggerPath + "WriteError\\", $"{DateTime.Now.ToString("yyyyMMdd")}.txt",
+                    message + "\r\n");
             }
             catch (Exception ex)
             {
@@ -177,10 +197,12 @@ namespace iMES.Core.Services
             {
                 log.BeginDate = DateTime.Now;
             }
+
             if (log.EndDate == null)
             {
                 log.EndDate = DateTime.Now;
             }
+
             //  row["Id"] = log.Id;
             row["LogType"] = log.LogType;
             row["RequestParameter"] = log.RequestParameter?.Replace("\r\n", "");
@@ -199,6 +221,7 @@ namespace iMES.Core.Services
             row["Role_Id"] = log.Role_Id ?? -1;
             queueTable.Rows.Add(row);
         }
+
         private static DataTable CreateEmptyTable()
         {
             DataTable queueTable = new DataTable();
@@ -224,16 +247,18 @@ namespace iMES.Core.Services
         {
             string result = String.Empty;
             log.Url = context.Request.Scheme + "://" + context.Request.Host + context.Request.PathBase +
-                context.Request.Path;
+                      context.Request.Path;
 
             log.UserIP = context.GetUserIp()?.Replace("::ffff:", "");
-            log.ServiceIP = context.Connection.LocalIpAddress.MapToIPv4().ToString() + ":" + context.Connection.LocalPort;
+            log.ServiceIP = context.Connection.LocalIpAddress.MapToIPv4().ToString() + ":" +
+                            context.Connection.LocalPort;
 
             log.BrowserType = context.Request.Headers["User-Agent"];
-            if (log.BrowserType.Length>190)
+            if (log.BrowserType.Length > 190)
             {
                 log.BrowserType = log.BrowserType.Substring(0, 190);
             }
+
             if (string.IsNullOrEmpty(log.RequestParameter))
             {
                 try

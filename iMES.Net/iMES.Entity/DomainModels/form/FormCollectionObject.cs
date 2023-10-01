@@ -21,7 +21,7 @@ namespace iMES.Entity.DomainModels
        /// </summary>
        [Key]
        [Display(Name ="FormCollectionId")]
-       [Column(TypeName="uniqueidentifier")]
+       [Column(TypeName="varchar(36)")]
        [Required(AllowEmptyStrings=false)]
        public Guid FormCollectionId { get; set; }
 
@@ -29,7 +29,7 @@ namespace iMES.Entity.DomainModels
        ///表单ID
        /// </summary>
        [Display(Name ="表单ID")]
-       [Column(TypeName="uniqueidentifier")]
+       [Column(TypeName="varchar(36)")]
        [Editable(true)]
        public Guid? FormId { get; set; }
 

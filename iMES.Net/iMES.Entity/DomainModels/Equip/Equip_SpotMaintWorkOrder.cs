@@ -21,7 +21,7 @@ namespace iMES.Entity.DomainModels
        /// </summary>
        [Key]
        [Display(Name ="点检保养工单主键")]
-       [Column(TypeName="uniqueidentifier")]
+       [Column(TypeName="varchar(36)")]
        [Editable(true)]
        [Required(AllowEmptyStrings=false)]
        public Guid SpotMaintWorkOrderId { get; set; }
@@ -39,7 +39,7 @@ namespace iMES.Entity.DomainModels
        ///点检保养计划主键
        /// </summary>
        [Display(Name ="点检保养计划主键")]
-       [Column(TypeName="uniqueidentifier")]
+       [Column(TypeName="varchar(36)")]
        [Editable(true)]
        [Required(AllowEmptyStrings=false)]
        public Guid SpotMaintPlanId { get; set; }
