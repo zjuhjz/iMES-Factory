@@ -200,6 +200,7 @@ namespace iMES.Core.Dapper
         public List<T> QueryList<T>(string cmd, object param, CommandType? commandType = null,
             bool beginTransaction = false)
         {
+            Console.WriteLine("cmd: " + cmd);
             return Execute(
                 (conn, dbTransaction) =>
                 {

@@ -79,7 +79,7 @@ namespace iMES.Entity.DomainModels
         /// </summary>
         [Display(Name = "DBServer")]
         [MaxLength(10000)]
-        [Column(TypeName = "nvarchar(1000)")]
+        [Column(TypeName = "nvarchar(max)")]
         public string DBServer { get; set; }
 
         /// <summary>

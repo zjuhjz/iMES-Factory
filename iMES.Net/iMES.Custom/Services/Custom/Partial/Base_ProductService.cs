@@ -1,11 +1,12 @@
 /*
  *所有关于Base_Product类的业务代码应在此处编写
-*可使用repository.调用常用方法，获取EF/Dapper等信息
-*如果需要事务请使用repository.DbContextBeginTransaction
-*也可使用DBServerProvider.手动获取数据库相关信息
-*用户信息、权限、角色等使用UserContext.Current操作
-*Base_ProductService对增、删、改查、导入、导出、审核业务代码扩展参照ServiceFunFilter
-*/
+ *可使用repository.调用常用方法，获取EF/Dapper等信息
+ *如果需要事务请使用repository.DbContextBeginTransaction
+ *也可使用DBServerProvider.手动获取数据库相关信息
+ *用户信息、权限、角色等使用UserContext.Current操作
+ *Base_ProductService对增、删、改查、导入、导出、审核业务代码扩展参照ServiceFunFilter
+ */
+
 using iMES.Core.BaseProvider;
 using iMES.Core.Extensions.AutofacManager;
 using iMES.Entity.DomainModels;
@@ -29,16 +30,16 @@ namespace iMES.Custom.Services
     public partial class Base_ProductService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IBase_ProductRepository _repository;//访问数据库
-        private readonly IBase_NumberRuleRepository _numberRuleRepository;//自定义编码规则访问数据库
+        private readonly IBase_ProductRepository _repository; //访问数据库
+        private readonly IBase_NumberRuleRepository _numberRuleRepository; //自定义编码规则访问数据库
 
         [ActivatorUtilitiesConstructor]
         public Base_ProductService(
             IBase_ProductRepository dbRepository,
             IBase_NumberRuleRepository numberRuleRepository,
             IHttpContextAccessor httpContextAccessor
-            )
-        : base(dbRepository)
+        )
+            : base(dbRepository)
         {
             _httpContextAccessor = httpContextAccessor;
             _repository = dbRepository;
@@ -46,19 +47,24 @@ namespace iMES.Custom.Services
             //多租户会用到这init代码，其他情况可以不用
             //base.Init(dbRepository);
         }
+
         WebResponseContent webResponse = new WebResponseContent();
+
         public override PageGridData<Base_Product> GetPageData(PageDataOptions options)
         {
             //查询完成后，在返回页面前可对查询的数据进行操作
             GetPageDataOnExecuted = (PageGridData<Base_Product> grid) =>
             {
                 //获取当前库存数量
-                List<Base_Product> storeList =  GetStoreNumber();
+                List<Base_Product> storeList = GetStoreNumber();
+                Console.WriteLine("storelist");
+                Console.WriteLine(storeList.ToString());
                 for (int i = 0; i < grid.rows.Count; i++)
                 {
                     if (storeList.Exists(x => x.Product_Id == grid.rows[i].Product_Id))
                     {
-                        grid.rows[i].InventoryQty = storeList.Find(x => x.Product_Id == grid.rows[i].Product_Id).InventoryQty;
+                        grid.rows[i].InventoryQty =
+                            storeList.Find(x => x.Product_Id == grid.rows[i].Product_Id).InventoryQty;
                     }
                     else
                     {
@@ -68,15 +74,20 @@ namespace iMES.Custom.Services
             };
             return base.GetPageData(options);
         }
+
         /// <summary>
         /// 获取产品库存数量
         /// </summary>
         /// <returns></returns>
         public static List<Base_Product> GetStoreNumber()
         {
-            string sql = @"  select * from View_GetProductStoreNumber ";
-              return DBServerProvider.SqlDapper.QueryList<Base_Product>(sql, null);
+            Console.WriteLine("about to get view");
+            // TODO e_ifox baseroductservice getstorenumber
+            // string sql = @"  select * from View_GetProductStoreNumber ";
+            string sql = @"  select * from base_product ";
+            return DBServerProvider.SqlDapper.QueryList<Base_Product>(sql, null);
         }
+
         /// <summary>
         /// 新建
         /// </summary>
@@ -94,19 +105,19 @@ namespace iMES.Custom.Services
                 {
                     return webResponse.Error("产品名称已存在");
                 }
+
                 if (repository.Exists(x => x.ProductCode == product.ProductCode))
                 {
                     return webResponse.Error("产品编号已存在");
                 }
+
                 return webResponse.OK();
             };
             //扩展字段开始 start
-            AddOnExecuted = (Base_Product product, object list) =>
-            {
-                return webResponse.OK();
-            };
+            AddOnExecuted = (Base_Product product, object list) => { return webResponse.OK(); };
             return base.Add(saveDataModel);
         }
+
         /// <summary>
         /// 删除产品
         /// </summary>
@@ -115,12 +126,10 @@ namespace iMES.Custom.Services
         /// <returns></returns>
         public override WebResponseContent Del(object[] keys, bool delList = false)
         {
-            base.DelOnExecuted = (object[] productIds) =>
-            {
-                return new WebResponseContent() { Status = true };
-            };
+            base.DelOnExecuted = (object[] productIds) => { return new WebResponseContent() { Status = true }; };
             return base.Del(keys, delList);
         }
+
         /// <summary>
         /// 编辑
         /// </summary>
@@ -135,10 +144,12 @@ namespace iMES.Custom.Services
                 {
                     return webResponse.Error("产品名称已存在");
                 }
+
                 if (repository.Exists(x => x.ProductCode == product.ProductCode && x.Product_Id != product.Product_Id))
                 {
                     return webResponse.Error("产品编号已存在");
                 }
+
                 return webResponse.OK();
             };
             base.UpdateOnExecuted = (Base_Product product, object obj1, object obj2, List<object> List) =>
@@ -147,6 +158,7 @@ namespace iMES.Custom.Services
             };
             return base.Update(saveDataModel);
         }
+
         /// <summary>
         /// 导入
         /// </summary>
@@ -165,21 +177,21 @@ namespace iMES.Custom.Services
                     {
                         return webResponse.Error("产品名称已存在");
                     }
+
                     if (repository.Exists(x => x.ProductCode == list[i].ProductCode))
                     {
                         return webResponse.Error("产品编号已存在");
                     }
                 }
+
                 return webResponse.OK();
             };
 
             //导入后处理(已经写入到数据库了)
-            ImportOnExecuted = (List<Base_Product> list) =>
-            {
-                return webResponse.OK();
-            };
+            ImportOnExecuted = (List<Base_Product> list) => { return webResponse.OK(); };
             return base.Import(files);
         }
+
         /// <summary>
         /// 自动生成产品编号
         /// </summary>
@@ -204,8 +216,10 @@ namespace iMES.Custom.Services
                 }
                 else
                 {
-                    rule += (defectItemCode.Substring(defectItemCode.Length - numberRule.SerialNumber).GetInt() + 1).ToString("0".PadLeft(numberRule.SerialNumber, '0'));
+                    rule += (defectItemCode.Substring(defectItemCode.Length - numberRule.SerialNumber).GetInt() + 1)
+                        .ToString("0".PadLeft(numberRule.SerialNumber, '0'));
                 }
+
                 return rule;
             }
             else //如果自定义序号配置项不存在，则使用日期生成
@@ -213,6 +227,7 @@ namespace iMES.Custom.Services
                 return DateTime.Now.ToString("yyyyMMddHHmmssffff");
             }
         }
+
         /// <summary>
         /// 获取表扩展字段
         /// </summary>
@@ -221,18 +236,17 @@ namespace iMES.Custom.Services
         public object GetProductInfoByProductID(int productId)
         {
             return (repository.Find(x => x.Product_Id == productId, a =>
-              new
-              {
-                  Product_Id = a.Product_Id,
-                  ProductCode = a.ProductCode,
-                  ProductName = a.ProductName,
-                  Unit_Id = a.Unit_Id,
-                  ProductStandard = a.ProductStandard,
-                  ProductAttribute = a.ProductAttribute,
-                  Process_Id = a.Process_Id
-
-              })).OrderByDescending(a => a.Product_Id)
-                 .ThenByDescending(q => q.Product_Id).ToList();
+                    new
+                    {
+                        Product_Id = a.Product_Id,
+                        ProductCode = a.ProductCode,
+                        ProductName = a.ProductName,
+                        Unit_Id = a.Unit_Id,
+                        ProductStandard = a.ProductStandard,
+                        ProductAttribute = a.ProductAttribute,
+                        Process_Id = a.Process_Id
+                    })).OrderByDescending(a => a.Product_Id)
+                .ThenByDescending(q => q.Product_Id).ToList();
         }
     }
 }

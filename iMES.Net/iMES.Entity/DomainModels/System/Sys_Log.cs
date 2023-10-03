@@ -125,7 +125,7 @@ namespace iMES.Entity.DomainModels
         /// </summary>
         [Display(Name = "用户名称")]
         [MaxLength(30000)]
-        [Column(TypeName = "varchar(3000)")]
+        [Column(TypeName = "varchar(max)")]
         public string UserName { get; set; }
 
         /// <summary>

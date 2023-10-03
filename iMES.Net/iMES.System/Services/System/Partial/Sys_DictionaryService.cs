@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System;
 using iMES.Core.BaseProvider;
 using iMES.Core.Const;
 using iMES.Core.Enums;
@@ -17,6 +18,7 @@ namespace iMES.System.Services
         protected override void Init(IRepository<Sys_Dictionary> repository)
         {
         }
+
         /// <summary>
         /// 代码生成器获取所有字典项编号(超级管理权限)
         /// </summary>
@@ -40,7 +42,7 @@ namespace iMES.System.Services
                 config = s.Config,
                 dbSql = s.DbSql,
                 list = s.Sys_DictionaryList.OrderByDescending(o => o.OrderNo)
-                          .Select(list => new { key = list.DicValue, value = list.DicName })
+                    .Select(list => new { key = list.DicValue, value = list.DicName })
             }).ToList();
 
             object GetSourceData(string dicNo, string dbSql, object data)
@@ -51,8 +53,12 @@ namespace iMES.System.Services
                 {
                     return data as object;
                 }
+
+                Console.WriteLine(dbSql);
+
                 return repository.DapperContext.QueryList<object>(dbSql, null);
             }
+
             return dicConfig.Select(item => new
             {
                 item.dicNo,
@@ -60,6 +66,7 @@ namespace iMES.System.Services
                 data = GetSourceData(item.dicNo, item.dbSql, item.list)
             }).ToList();
         }
+
         /// <summary>
         /// 通过远程搜索
         /// </summary>
@@ -72,6 +79,7 @@ namespace iMES.System.Services
             {
                 return null;
             }
+
             //  2020.05.01增加根据用户信息加载字典数据源sql
             string sql = Dictionaries.Where(x => x.DicNo == dicNo).FirstOrDefault()?.DbSql;
             sql = DictionaryHandler.GetCustomDBSql(dicNo, sql);
@@ -79,6 +87,7 @@ namespace iMES.System.Services
             {
                 return null;
             }
+
             sql = $"SELECT * FROM ({sql}) AS t WHERE value LIKE @value";
             return repository.DapperContext.QueryList<object>(sql, new { value = "%" + value + "%" });
         }
@@ -118,6 +127,7 @@ namespace iMES.System.Services
             {
                 return GetPgSqlTableDictionary(keyData);
             }
+
             var dicInfo = Dictionaries.Where(x => keyData.ContainsKey(x.DicNo) && !string.IsNullOrEmpty(x.DbSql))
                 .Select(x => new { x.DicNo, x.DbSql })
                 .ToList();
@@ -130,9 +140,10 @@ namespace iMES.System.Services
                     //  2020.05.01增加根据用户信息加载字典数据源sql
                     string sql = DictionaryHandler.GetCustomDBSql(x.DicNo, x.DbSql);
                     sql = $"SELECT * FROM ({sql}) AS t WHERE " +
-                   $"{keySql}" +
-                   $" in @data";
-                    list.Add(new { key = x.DicNo, data = repository.DapperContext.QueryList<object>(sql, new { data }) });
+                          $"{keySql}" +
+                          $" in @data";
+                    list.Add(new
+                        { key = x.DicNo, data = repository.DapperContext.QueryList<object>(sql, new { data }) });
                 }
             });
             return list;
@@ -156,7 +167,12 @@ namespace iMES.System.Services
                 {
                     string sql = DictionaryHandler.GetCustomDBSql(x.DicNo, x.DbSql);
                     sql = $"SELECT * FROM ({sql}) AS t WHERE t.key=any(@data)";
-                    list.Add(new { key = x.DicNo, data = repository.DapperContext.QueryList<object>(sql, new { data = data.Select(s => s.ToString()).ToList() }) });
+                    list.Add(new
+                    {
+                        key = x.DicNo,
+                        data = repository.DapperContext.QueryList<object>(sql,
+                            new { data = data.Select(s => s.ToString()).ToList() })
+                    });
                 }
             });
             return list;
@@ -166,12 +182,10 @@ namespace iMES.System.Services
         public override PageGridData<Sys_Dictionary> GetPageData(PageDataOptions pageData)
         {
             //增加查询条件
-            base.QueryRelativeExpression = (IQueryable<Sys_Dictionary> fun) =>
-            {
-                return fun.Where(x => 1 == 1);
-            };
+            base.QueryRelativeExpression = (IQueryable<Sys_Dictionary> fun) => { return fun.Where(x => 1 == 1); };
             return base.GetPageData(pageData);
         }
+
         public override WebResponseContent Update(SaveModel saveDataModel)
         {
             if (saveDataModel.MainData.DicKeyIsNullOrEmpty("DicNo")
@@ -180,7 +194,7 @@ namespace iMES.System.Services
             //判断修改的字典编号是否在其他ID存在
             string dicNo = saveDataModel.MainData["DicNo"].ToString().Trim();
             if (base.repository.Exists(x => x.DicNo == dicNo && x.Dic_ID != saveDataModel.MainData["Dic_ID"].GetInt()))
-                return new WebResponseContent().Error($"字典编号:{ dicNo}已存在。!");
+                return new WebResponseContent().Error($"字典编号:{dicNo}已存在。!");
 
             base.UpdateOnExecuting = (Sys_Dictionary dictionary, object addList, object editList, List<object> obj) =>
             {
@@ -195,7 +209,6 @@ namespace iMES.System.Services
                 return new WebResponseContent(true);
             };
             return RemoveCache(base.Update(saveDataModel));
-
         }
 
 
@@ -241,6 +254,7 @@ namespace iMES.System.Services
 
             return source;
         }
+
         public override WebResponseContent Add(SaveModel saveDataModel)
         {
             if (saveDataModel.MainData.DicKeyIsNullOrEmpty("DicNo")) return base.Add(saveDataModel);
@@ -263,10 +277,7 @@ namespace iMES.System.Services
         public override WebResponseContent Del(object[] keys, bool delList = false)
         {
             //delKeys删除的key
-            base.DelOnExecuting = (object[] delKeys) =>
-            {
-                return new WebResponseContent(true);
-            };
+            base.DelOnExecuting = (object[] delKeys) => { return new WebResponseContent(true); };
             //true将子表数据同时删除
             return RemoveCache(base.Del(keys, true));
         }
@@ -277,8 +288,8 @@ namespace iMES.System.Services
             {
                 CacheContext.Remove(DictionaryManager.Key);
             }
+
             return webResponse;
         }
     }
 }
-

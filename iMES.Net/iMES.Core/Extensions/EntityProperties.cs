@@ -231,7 +231,7 @@ namespace iMES.Core.Extensions
 
             if (lenght && colType == SqlDbTypeName.NVarChar)
             {
-                colType = "nvarchar(65500)";
+                colType = "nvarchar(max)";
             }
 
             return new KeyValuePair<string, string>(property.Name, colType);
@@ -489,7 +489,7 @@ namespace iMES.Core.Extensions
             Dictionary<string, string> dictCloumn = new Dictionary<string, string>();
             for (int i = 0; i < table.Columns.Count; i++)
             {
-                dictCloumn.Add(table.Columns[i].ColumnName, "  nvarchar(65500)");
+                dictCloumn.Add(table.Columns[i].ColumnName, "  nvarchar(max)");
             }
 
 

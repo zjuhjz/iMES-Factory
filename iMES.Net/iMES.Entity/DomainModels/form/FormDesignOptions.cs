@@ -64,7 +64,7 @@ namespace iMES.Entity.DomainModels
         ///表单字段
         /// </summary>
         [Display(Name = "表单字段")]
-        [Column(TypeName = "nvarchar(5500)")]
+        [Column(TypeName = "nvarchar(max)")]
         [Editable(true)]
         public string FormFields { get; set; }
 

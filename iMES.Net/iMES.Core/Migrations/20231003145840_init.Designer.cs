@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iMES.Core.EFDbContext;
@@ -11,7 +12,7 @@ using iMES.Core.EFDbContext;
 namespace iMES.Core.Migrations
 {
     [DbContext(typeof(SysDbContext))]
-    [Migration("20231001143219_init")]
+    [Migration("20231003145840_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -20,13 +21,17 @@ namespace iMES.Core.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.3")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("iMES.Entity.DomainModels.Base_DefectItem", b =>
                 {
                     b.Property<int>("DefectItem_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DefectItem_Id"));
 
                     b.Property<string>("Attachment")
                         .HasMaxLength(200)
@@ -76,6 +81,8 @@ namespace iMES.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DesktopMenu_Id"));
+
                     b.Property<string>("Color")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -91,7 +98,7 @@ namespace iMES.Core.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<sbyte>("Enable")
+                    b.Property<byte>("Enable")
                         .HasColumnType("tinyint");
 
                     b.Property<int>("MenuId")
@@ -127,6 +134,8 @@ namespace iMES.Core.Migrations
                     b.Property<int>("MaterialDetail_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaterialDetail_Id"));
 
                     b.Property<int>("ChildProduct_Id")
                         .HasColumnType("int");
@@ -171,6 +180,8 @@ namespace iMES.Core.Migrations
                     b.Property<int>("MeritPay_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MeritPay_Id"));
 
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime");
@@ -227,6 +238,8 @@ namespace iMES.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Notice_Id"));
+
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime");
 
@@ -272,6 +285,8 @@ namespace iMES.Core.Migrations
                     b.Property<int>("NumberRule_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NumberRule_Id"));
 
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime");
@@ -326,6 +341,8 @@ namespace iMES.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Process_Id"));
+
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime");
 
@@ -379,6 +396,8 @@ namespace iMES.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProcessLine_Id"));
+
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime");
 
@@ -418,6 +437,8 @@ namespace iMES.Core.Migrations
                     b.Property<int>("ProcessLineList_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProcessLineList_Id"));
 
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime");
@@ -472,6 +493,8 @@ namespace iMES.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProcessList_Id"));
+
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime");
 
@@ -517,6 +540,8 @@ namespace iMES.Core.Migrations
                     b.Property<int>("Product_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Product_Id"));
 
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime");
@@ -1507,7 +1532,7 @@ namespace iMES.Core.Migrations
                         .HasColumnType("nvarchar(60)");
 
                     b.Property<string>("FormData")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FormId")
                         .HasColumnType("varchar(36)");
@@ -1523,7 +1548,7 @@ namespace iMES.Core.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(5500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("FormCollectionId");
 
@@ -1553,10 +1578,10 @@ namespace iMES.Core.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FormFields")
-                        .HasColumnType("nvarchar(5500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FormOptions")
-                        .HasColumnType("nvarchar(5500)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Modifier")
                         .HasMaxLength(60)
@@ -1586,6 +1611,8 @@ namespace iMES.Core.Migrations
                     b.Property<int>("DefectId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DefectId"));
 
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime");
@@ -1636,6 +1663,8 @@ namespace iMES.Core.Migrations
                     b.Property<int>("InComingCheckId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InComingCheckId"));
 
                     b.Property<DateTime>("CheckDate")
                         .HasColumnType("date");
@@ -1717,6 +1746,8 @@ namespace iMES.Core.Migrations
                     b.Property<int>("InComingCheckTestItemId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InComingCheckTestItemId"));
 
                     b.Property<string>("CheckMethod")
                         .HasMaxLength(200)
@@ -1805,6 +1836,8 @@ namespace iMES.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OutCheckId"));
+
                     b.Property<DateTime>("CheckDate")
                         .HasColumnType("date");
 
@@ -1885,6 +1918,8 @@ namespace iMES.Core.Migrations
                     b.Property<int>("OutCheckTestItemId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OutCheckTestItemId"));
 
                     b.Property<string>("CheckMethod")
                         .HasMaxLength(200)
@@ -1972,6 +2007,8 @@ namespace iMES.Core.Migrations
                     b.Property<int>("ProcessCheckId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProcessCheckId"));
 
                     b.Property<DateTime>("CheckDate")
                         .HasColumnType("date");
@@ -2081,6 +2118,8 @@ namespace iMES.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProcessCheckTestItemId"));
+
                     b.Property<string>("CheckMethod")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
@@ -2168,6 +2207,8 @@ namespace iMES.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TemplateId"));
+
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime");
 
@@ -2222,6 +2263,8 @@ namespace iMES.Core.Migrations
                     b.Property<int>("TemplateProductId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TemplateProductId"));
 
                     b.Property<int?>("CheckMin")
                         .HasColumnType("int");
@@ -2293,6 +2336,8 @@ namespace iMES.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TemplateTestItemId"));
+
                     b.Property<string>("CheckMethod")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
@@ -2363,6 +2408,8 @@ namespace iMES.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TestItemId"));
+
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime");
 
@@ -2416,6 +2463,8 @@ namespace iMES.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Dept_Id"));
+
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime");
 
@@ -2457,6 +2506,8 @@ namespace iMES.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Dic_ID"));
+
                     b.Property<string>("Config")
                         .HasMaxLength(10000)
                         .HasColumnType("TEXT");
@@ -2473,7 +2524,7 @@ namespace iMES.Core.Migrations
 
                     b.Property<string>("DBServer")
                         .HasMaxLength(10000)
-                        .HasColumnType("nvarchar(1000)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DbSql")
                         .HasMaxLength(10000)
@@ -2489,7 +2540,7 @@ namespace iMES.Core.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<sbyte>("Enable")
+                    b.Property<byte>("Enable")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("Modifier")
@@ -2523,6 +2574,8 @@ namespace iMES.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DicList_ID"));
+
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime");
 
@@ -2544,7 +2597,7 @@ namespace iMES.Core.Migrations
                     b.Property<int?>("Dic_ID")
                         .HasColumnType("int");
 
-                    b.Property<sbyte?>("Enable")
+                    b.Property<byte?>("Enable")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("Modifier")
@@ -2576,6 +2629,8 @@ namespace iMES.Core.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime?>("BeginDate")
                         .HasColumnType("datetime");
@@ -2626,7 +2681,7 @@ namespace iMES.Core.Migrations
 
                     b.Property<string>("UserName")
                         .HasMaxLength(30000)
-                        .HasColumnType("varchar(3000)");
+                        .HasColumnType("varchar(max)");
 
                     b.Property<int?>("User_Id")
                         .HasColumnType("int");
@@ -2642,9 +2697,11 @@ namespace iMES.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Menu_Id"));
+
                     b.Property<string>("Auth")
                         .HasMaxLength(10000)
-                        .HasColumnType("nvarchar(10000)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime");
@@ -2657,7 +2714,7 @@ namespace iMES.Core.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<sbyte?>("Enable")
+                    b.Property<byte?>("Enable")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("Icon")
@@ -2691,7 +2748,7 @@ namespace iMES.Core.Migrations
 
                     b.Property<string>("Url")
                         .HasMaxLength(10000)
-                        .HasColumnType("nvarchar(10000)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Menu_Id");
 
@@ -2814,7 +2871,7 @@ namespace iMES.Core.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("PostData")
-                        .HasColumnType("nvarchar(5500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Status")
                         .HasColumnType("int");
@@ -2838,6 +2895,8 @@ namespace iMES.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Role_Id"));
+
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime");
 
@@ -2856,7 +2915,7 @@ namespace iMES.Core.Migrations
                     b.Property<int?>("Dept_Id")
                         .HasColumnType("int");
 
-                    b.Property<sbyte?>("Enable")
+                    b.Property<byte?>("Enable")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("Modifier")
@@ -2886,6 +2945,8 @@ namespace iMES.Core.Migrations
                     b.Property<int>("Auth_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Auth_Id"));
 
                     b.Property<string>("AuthValue")
                         .IsRequired()
@@ -2928,6 +2989,8 @@ namespace iMES.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ColumnId"));
+
                     b.Property<int?>("ApiInPut")
                         .HasColumnType("int");
 
@@ -2941,31 +3004,31 @@ namespace iMES.Core.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ColumnCnName")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ColumnName")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ColumnType")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ColumnWidth")
                         .HasColumnType("int");
 
                     b.Property<string>("Columnformat")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("CreateDate")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("CreateID")
                         .HasColumnType("int");
 
                     b.Property<string>("Creator")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DropNo")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("EditColNo")
                         .HasColumnType("int");
@@ -2974,7 +3037,7 @@ namespace iMES.Core.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("EditType")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Enable")
                         .HasColumnType("int");
@@ -3001,10 +3064,10 @@ namespace iMES.Core.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Modifier")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifyDate")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("ModifyID")
                         .HasColumnType("int");
@@ -3013,7 +3076,7 @@ namespace iMES.Core.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Script")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("SearchColNo")
                         .HasColumnType("int");
@@ -3022,13 +3085,13 @@ namespace iMES.Core.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("SearchType")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Sortable")
                         .HasColumnType("int");
 
                     b.Property<string>("TableName")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Table_Id")
                         .HasColumnType("int");
@@ -3046,38 +3109,40 @@ namespace iMES.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Table_Id"));
+
                     b.Property<string>("CnName")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ColumnCNName")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DBServer")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DataTableType")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DetailCnName")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DetailName")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EditorType")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Enable")
                         .HasColumnType("int");
 
                     b.Property<string>("ExpressField")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FolderName")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Namespace")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("OrderNo")
                         .HasColumnType("int");
@@ -3086,19 +3151,19 @@ namespace iMES.Core.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("RichText")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SortName")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TableName")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TableTrueName")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UploadField")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("UploadMaxCount")
                         .HasColumnType("int");
@@ -3113,6 +3178,8 @@ namespace iMES.Core.Migrations
                     b.Property<int>("Unit_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Unit_Id"));
 
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime");
@@ -3154,6 +3221,8 @@ namespace iMES.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("User_Id"));
+
                     b.Property<string>("Address")
                         .HasMaxLength(400)
                         .HasColumnType("nvarchar(400)");
@@ -3192,7 +3261,7 @@ namespace iMES.Core.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<sbyte>("Enable")
+                    b.Property<byte>("Enable")
                         .HasColumnType("tinyint");
 
                     b.Property<int?>("Gender")
@@ -3277,6 +3346,8 @@ namespace iMES.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VersionInfo_Id"));
+
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime");
 
@@ -3328,11 +3399,11 @@ namespace iMES.Core.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<sbyte?>("Enable")
+                    b.Property<byte?>("Enable")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("LineConfig")
-                        .HasColumnType("nvarchar(5000)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Modifier")
                         .HasMaxLength(30)
@@ -3345,7 +3416,7 @@ namespace iMES.Core.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("NodeConfig")
-                        .HasColumnType("nvarchar(5000)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Remark")
                         .HasMaxLength(500)
@@ -3386,7 +3457,7 @@ namespace iMES.Core.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<sbyte?>("Enable")
+                    b.Property<byte?>("Enable")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("Modifier")
@@ -3452,7 +3523,7 @@ namespace iMES.Core.Migrations
                     b.Property<int?>("CurrentOrderId")
                         .HasColumnType("int");
 
-                    b.Property<sbyte?>("Enable")
+                    b.Property<byte?>("Enable")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("Modifier")
@@ -3518,7 +3589,7 @@ namespace iMES.Core.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<sbyte?>("Enable")
+                    b.Property<byte?>("Enable")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("Modifier")
@@ -3695,6 +3766,8 @@ namespace iMES.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ToolsReceiveId"));
+
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime");
 
@@ -3736,6 +3809,8 @@ namespace iMES.Core.Migrations
                     b.Property<int>("ToolsReceiveListId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ToolsReceiveListId"));
 
                     b.Property<string>("Brand")
                         .HasMaxLength(100)
@@ -3798,6 +3873,8 @@ namespace iMES.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ToolsReturnId"));
+
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime");
 
@@ -3839,6 +3916,8 @@ namespace iMES.Core.Migrations
                     b.Property<int>("ToolsReturnListId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ToolsReturnListId"));
 
                     b.Property<string>("Brand")
                         .HasMaxLength(100)
@@ -3900,6 +3979,8 @@ namespace iMES.Core.Migrations
                     b.Property<int>("MaterialDetail_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaterialDetail_Id"));
 
                     b.Property<string>("CProductCode")
                         .HasMaxLength(200)
@@ -4317,6 +4398,8 @@ namespace iMES.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Product_Id"));
+
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime");
 
@@ -4449,6 +4532,8 @@ namespace iMES.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OutWareHouseBill_Id"));
+
                     b.Property<string>("Attachement")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
@@ -4506,6 +4591,8 @@ namespace iMES.Core.Migrations
                     b.Property<int>("OutWareHouseBillList_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OutWareHouseBillList_Id"));
 
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime");
@@ -4578,6 +4665,8 @@ namespace iMES.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WareHouseBill_Id"));
+
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime");
 
@@ -4624,6 +4713,8 @@ namespace iMES.Core.Migrations
                     b.Property<int>("WareHouseBillList_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WareHouseBillList_Id"));
 
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime");
@@ -4696,6 +4787,8 @@ namespace iMES.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Dic_ID"));
+
                     b.Property<int>("DicList_ID")
                         .HasColumnType("int");
 
@@ -4712,7 +4805,7 @@ namespace iMES.Core.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<sbyte?>("Enable")
+                    b.Property<byte?>("Enable")
                         .HasColumnType("tinyint");
 
                     b.HasKey("Dic_ID");
@@ -4726,6 +4819,8 @@ namespace iMES.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Action_Id"));
+
                     b.Property<int>("Menu_Id")
                         .HasColumnType("int");
 
@@ -4733,10 +4828,10 @@ namespace iMES.Core.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Value")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Action_Id");
 

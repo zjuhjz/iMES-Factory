@@ -38,7 +38,7 @@ namespace iMES.Entity.DomainModels
         ///标题
         /// </summary>
         [Display(Name = "标题")]
-        [Column(TypeName = "nvarchar(5500)")]
+        [Column(TypeName = "nvarchar(max)")]
         [Editable(true)]
         public string Title { get; set; }
 
@@ -46,7 +46,7 @@ namespace iMES.Entity.DomainModels
         ///表单数据
         /// </summary>
         [Display(Name = "表单数据")]
-        [Column(TypeName = "TEXT")]
+        [Column(TypeName = "nvarchar(max)")]
         [Editable(true)]
         public string FormData { get; set; }
 

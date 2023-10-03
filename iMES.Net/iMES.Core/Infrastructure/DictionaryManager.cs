@@ -20,16 +20,14 @@ namespace iMES.Core.Infrastructure
 
         public static List<Sys_Dictionary> Dictionaries
         {
-            get
-            {
-                return GetAllDictionary();
-            }
+            get { return GetAllDictionary(); }
         }
 
         public static Sys_Dictionary GetDictionary(string dicNo)
         {
             return GetDictionaries(new string[] { dicNo }).FirstOrDefault();
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -42,11 +40,12 @@ namespace iMES.Core.Infrastructure
             {
                 try
                 {
-                    return DBServerProvider.SqlDapper.QueryList<SourceKeyVaule>(sql, null).Select(s => new Sys_DictionaryList()
-                    {
-                        DicName = s.Value,
-                        DicValue = s.Key.ToString()
-                    }).ToList();
+                    return DBServerProvider.SqlDapper.QueryList<SourceKeyVaule>(sql, null).Select(s =>
+                        new Sys_DictionaryList()
+                        {
+                            DicName = s.Value,
+                            DicValue = s.Key.ToString()
+                        }).ToList();
                 }
                 catch (Exception ex)
                 {
@@ -56,20 +55,35 @@ namespace iMES.Core.Infrastructure
                     // return null;
                 }
             }
+
             foreach (var item in Dictionaries.Where(x => dicNos.Contains(x.DicNo)))
             {
                 if (executeSql)
                 {
+                    Console.WriteLine("execute sql :" + item.DbSql);
                     //  2020.05.01增加根据用户信息加载字典数据源sql
                     string sql = DictionaryHandler.GetCustomDBSql(item.DicNo, item.DbSql);
+                    Console.WriteLine("execute sql :" + sql);
                     if (!string.IsNullOrEmpty(item.DbSql))
                     {
                         item.Sys_DictionaryList = query(sql);
+
+                        foreach (var v in item.Sys_DictionaryList)
+                        {
+                            Console.WriteLine(v.DicName);
+                            Console.WriteLine(v.DicValue);
+                        }
+
+
+                        Console.WriteLine(item.Sys_DictionaryList.Count);
+                        Console.WriteLine(item.Sys_DictionaryList.ToString());
                     }
                 }
+
                 yield return item;
             }
         }
+
         /// <summary>
         /// 根据数据字典名称和键值获取文本
         /// </summary>
@@ -84,10 +98,11 @@ namespace iMES.Core.Infrastructure
                 return sd.Sys_DictionaryList.Find(x => x.DicValue == key).DicName;
             }
             else
-            { 
+            {
                 return "";
             }
         }
+
         /// <summary>
         /// 每次变更字典配置的时候会重新拉取所有配置进行缓存(自行根据实际处理)
         /// </summary>
@@ -103,7 +118,8 @@ namespace iMES.Core.Infrastructure
 
             lock (_dicObj)
             {
-                if (_dicVersionn != "" && _dictionaries != null && _dicVersionn == cacheService.Get(Key)) return _dictionaries;
+                if (_dicVersionn != "" && _dictionaries != null && _dicVersionn == cacheService.Get(Key))
+                    return _dictionaries;
                 _dictionaries = DBServerProvider.DbContext
                     .Set<Sys_Dictionary>()
                     .Where(x => x.Enable == 1)
@@ -120,6 +136,7 @@ namespace iMES.Core.Infrastructure
                     _dicVersionn = cacheVersion;
                 }
             }
+
             return _dictionaries;
         }
     }
