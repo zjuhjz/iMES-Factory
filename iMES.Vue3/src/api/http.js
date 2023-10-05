@@ -18,8 +18,9 @@ else if (process.env.NODE_ENV == 'debug') {
     axios.defaults.baseURL = 'http://localhost:9991/';
 }
 
+// TODO 生产环境改base url
 else if (process.env.NODE_ENV == 'production') {
-    axios.defaults.baseURL = 'https://backopen.625sc.com:9993/';
+    axios.defaults.baseURL = 'https://localhost:9991/';
 }
 if (!axios.defaults.baseURL.endsWith('/')) {
     axios.defaults.baseURL+="/";

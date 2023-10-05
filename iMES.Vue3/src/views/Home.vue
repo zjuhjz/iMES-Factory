@@ -89,34 +89,34 @@
         </div>
       </div>
       <!--联系信息-->
-      <div class="h-top-center" style="width: 55%;">
-        <div class="n-item">
-          <div class="item" :class="'item1'" style="height: 100%;">
-            联系作者
-            <br />
-            <img style="width: 200px; height: 199px;margin-top: 20px;" src="@/assets/imgs/wechat.jpg">
-          </div>
-          <div class="item" :class="'item2'" style="height: 100%;">
-            交流讨论群
-            <br />
-            <img style="width: 200px; height: 238px;margin-top: 5px;" src="@/assets/imgs/qq.png">
-          </div>
-          <div class="item" :class="'item3'" style="height: 100%;">
-            微信小程序
-            <br />
-            <img style="width: 200px; height: 238px;margin-top: 5px;" src="@/assets/imgs/miniapp.png">
-          </div>
-        </div>
-      </div>
-      <div class="h-top-right task-table" style="width: 22%">
-        <h3 class="h3">#【iMES工厂管家】版本变更说明</h3>
-        <table border="0" cellspacing="0" cellpadding="0">
-          <tr v-for="(row, index) in list" :key="index" @click="open(row)">
-            <td>{{ index + 1 }}</td>
-            <td>{{ row.title }}</td>
-          </tr>
-        </table>
-      </div>
+<!--      <div class="h-top-center" style="width: 55%;">-->
+<!--        <div class="n-item">-->
+<!--          <div class="item" :class="'item1'" style="height: 100%;">-->
+<!--            联系作者-->
+<!--            <br />-->
+<!--            <img style="width: 200px; height: 199px;margin-top: 20px;" src="@/assets/imgs/wechat.jpg">-->
+<!--          </div>-->
+<!--          <div class="item" :class="'item2'" style="height: 100%;">-->
+<!--            交流讨论群-->
+<!--            <br />-->
+<!--            <img style="width: 200px; height: 238px;margin-top: 5px;" src="@/assets/imgs/qq.png">-->
+<!--          </div>-->
+<!--          <div class="item" :class="'item3'" style="height: 100%;">-->
+<!--            微信小程序-->
+<!--            <br />-->
+<!--            <img style="width: 200px; height: 238px;margin-top: 5px;" src="@/assets/imgs/miniapp.png">-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="h-top-right task-table" style="width: 22%">-->
+<!--        <h3 class="h3">#【iMES工厂管家】版本变更说明</h3>-->
+<!--        <table border="0" cellspacing="0" cellpadding="0">-->
+<!--          <tr v-for="(row, index) in list" :key="index" @click="open(row)">-->
+<!--            <td>{{ index + 1 }}</td>-->
+<!--            <td>{{ row.title }}</td>-->
+<!--          </tr>-->
+<!--        </table>-->
+<!--      </div>-->
     </div>
   </div>
 </template>
@@ -178,23 +178,6 @@
             icon: "el-icon-s-data",
             url: "/View_OutputStatistics",
           },
-        ],
-        contectcenter: [
-          {
-            title: "员工绩效",
-            icon: "el-icon-s-data",
-            url: "/View_EmployeePerformance",
-          },
-          {
-            title: "工资报表",
-            icon: "el-icon-s-data",
-            url: "/View_SalaryReport",
-          },
-          {
-            title: "不良品项分布",
-            icon: "el-icon-s-data",
-            url: "/View_DefectItemDistribute",
-          }
         ],
         n: 90,
         value1: "1",

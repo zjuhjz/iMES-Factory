@@ -1,6 +1,8 @@
 # 基础镜像
 FROM node:16.17.1
 
+ENV HOST=0.0.0.0
+
 # 设置工作目录
 WORKDIR /app
 
@@ -14,7 +16,7 @@ RUN npm install
 COPY . .
 
 # 暴露端口 
-EXPOSE 8080
+EXPOSE 9990
 
 # 运行命令
 CMD ["npm", "run", "serve"]

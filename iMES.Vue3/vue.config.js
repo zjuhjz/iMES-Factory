@@ -6,6 +6,8 @@ module.exports = {
   publicPath: './',
   devServer: {
     port: 9990,
+    hot: true,
+    host:'0.0.0.0',
     overlay: {
       warning: false,
       errors: false
@@ -32,7 +34,7 @@ module.exports = {
     config.plugins.delete('prefetch');
     //自下定义title
     config.plugin('html').tap((args) => {
-      args[0].title = 'iMES-您的新一代工厂管家【开源版】';
+      args[0].title = 'iMES-您的新一代工厂管家【开源版】 ';
       return args;
     });
 

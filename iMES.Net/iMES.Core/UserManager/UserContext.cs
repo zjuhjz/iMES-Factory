@@ -24,19 +24,14 @@ namespace iMES.Core.ManageUser
         /// </summary>
         public static UserContext Current
         {
-            get
-            {
-                return Context.RequestServices.GetService(typeof(UserContext)) as UserContext;
-            }
+            get { return Context.RequestServices.GetService(typeof(UserContext)) as UserContext; }
         }
 
         private static Microsoft.AspNetCore.Http.HttpContext Context
         {
-            get
-            {
-                return Utilities.HttpContext.Current;
-            }
+            get { return Utilities.HttpContext.Current; }
         }
+
         private static ICacheService CacheService
         {
             get { return GetService<ICacheService>(); }
@@ -55,6 +50,7 @@ namespace iMES.Core.ManageUser
                 {
                     return _userInfo;
                 }
+
                 return GetUserInfo(UserId);
             }
         }
@@ -68,6 +64,7 @@ namespace iMES.Core.ManageUser
         {
             get { return IsRoleIdSuperAdmin(this.RoleId); }
         }
+
         /// <summary>
         /// 角色ID为1的默认为超级管理员
         /// </summary>
@@ -84,6 +81,7 @@ namespace iMES.Core.ManageUser
                 _userInfo = new UserInfo();
                 return _userInfo;
             }
+
             string key = userId.GetUserIdKey();
             _userInfo = CacheService.Get<UserInfo>(key);
             if (_userInfo != null && _userInfo.User_Id > 0) return _userInfo;
@@ -95,7 +93,7 @@ namespace iMES.Core.ManageUser
                     Role_Id = s.Role_Id.GetInt(),
                     RoleName = s.RoleName,
                     //2022.08.15增加部门id
-                    DeptId = s.Dept_Id??0,
+                    DeptId = s.Dept_Id ?? 0,
                     Token = s.Token,
                     UserName = s.UserName,
                     UserTrueName = s.UserTrueName,
@@ -106,6 +104,7 @@ namespace iMES.Core.ManageUser
             {
                 CacheService.AddObject(key, _userInfo);
             }
+
             return _userInfo ?? new UserInfo();
         }
 
@@ -123,8 +122,8 @@ namespace iMES.Core.ManageUser
         /// 每个角色ID对应的菜单权限（已做静态化处理）
         /// 每次获取权限时用当前服务器的版本号与redis/memory缓存的版本比较,如果不同会重新刷新缓存
         /// </summary>
-        private static readonly Dictionary<int, List<Permissions>> rolePermissions = new Dictionary<int, List<Permissions>>();
-
+        private static readonly Dictionary<int, List<Permissions>> rolePermissions =
+            new Dictionary<int, List<Permissions>>();
 
 
         /// <summary>
@@ -133,10 +132,7 @@ namespace iMES.Core.ManageUser
 
         public List<Permissions> Permissions
         {
-            get
-            {
-                return GetPermissions(RoleId);
-            }
+            get { return GetPermissions(RoleId); }
         }
 
         /// <summary>
@@ -152,7 +148,6 @@ namespace iMES.Core.ManageUser
                     CacheService.Add(roleId.GetRoleIdKey(), DateTime.Now.ToString("yyyyMMddHHMMssfff"));
                 }
             }
-
         }
 
         /// <summary>
@@ -164,17 +159,16 @@ namespace iMES.Core.ManageUser
         {
             return GetPermissions(RoleId).Where(x => x.TableName == tableName).FirstOrDefault();
         }
+
         /// <summary>
         /// 2022.03.26
         /// 菜单类型1:移动端，0:PC端
         /// </summary>
         public static int MenuType
         {
-            get
-            {
-                return Context.Request.Headers.ContainsKey("uapp") ? 1 : 0;
-            }
+            get { return Context.Request.Headers.ContainsKey("uapp") ? 1 : 0; }
         }
+
         /// <summary>
         /// 自定条件查询权限
         /// </summary>
@@ -194,11 +188,12 @@ namespace iMES.Core.ManageUser
                 {
                     var menuAuthArr = x.MenuAuth.DeserializeObject<List<Sys_Actions>>();
                     x.UserAuthArr = string.IsNullOrEmpty(x.UserAuth)
-                    ? new string[0]
-                    : x.UserAuth.Split(",").Where(c => menuAuthArr.Any(m => m.Value == c)).ToArray();
-
+                        ? new string[0]
+                        : x.UserAuth.Split(",").Where(c => menuAuthArr.Any(m => m.Value == c)).ToArray();
                 }
-                catch { }
+                catch
+                {
+                }
                 finally
                 {
                     if (x.UserAuthArr == null)
@@ -209,6 +204,7 @@ namespace iMES.Core.ManageUser
             });
             return permissions;
         }
+
         private List<Permissions> MenuActionToArray(List<Permissions> permissions)
         {
             permissions.ForEach(x =>
@@ -216,10 +212,12 @@ namespace iMES.Core.ManageUser
                 try
                 {
                     x.UserAuthArr = string.IsNullOrEmpty(x.UserAuth)
-                    ? new string[0]
-                    : x.UserAuth.DeserializeObject<List<Sys_Actions>>().Select(s => s.Value).ToArray();
+                        ? new string[0]
+                        : x.UserAuth.DeserializeObject<List<Sys_Actions>>().Select(s => s.Value).ToArray();
                 }
-                catch { }
+                catch
+                {
+                }
                 finally
                 {
                     if (x.UserAuthArr == null)
@@ -230,6 +228,7 @@ namespace iMES.Core.ManageUser
             });
             return permissions;
         }
+
         public List<Permissions> GetPermissions(int roleId)
         {
             if (IsRoleIdSuperAdmin(roleId))
@@ -250,6 +249,7 @@ namespace iMES.Core.ManageUser
                     }).ToList();
                 return MenuActionToArray(permissions);
             }
+
             ICacheService cacheService = CacheService;
             string roleKey = roleId.GetRoleIdKey();
 
@@ -275,22 +275,22 @@ namespace iMES.Core.ManageUser
                 //没有redis/memory缓存角色的版本号或与当前服务器的角色版本号不同时，刷新缓存
                 var dbContext = DBServerProvider.DbContext;
                 List<Permissions> _permissions = (from a in dbContext.Set<Sys_Menu>()
-                                                  join b in dbContext.Set<Sys_RoleAuth>()
-                                                  on a.Menu_Id equals b.Menu_Id
-                                                  where b.Role_Id == roleId //&& a.ParentId > 0
-                                                  && b.AuthValue != ""
-                                                  orderby a.ParentId
-                                                  select new Permissions
-                                                  {
-                                                      Menu_Id = a.Menu_Id,
-                                                      ParentId = a.ParentId,
-                                                      //2020.05.06增加默认将表名转换成小写，权限验证时不再转换
-                                                      TableName = (a.TableName ?? "").ToLower(),
-                                                      MenuAuth = a.Auth,
-                                                      UserAuth = b.AuthValue ?? "",
-                                                      // 2022.03.26增移动端加菜单类型
-                                                      MenuType = a.MenuType ?? 0
-                                                  }).ToList();
+                    join b in dbContext.Set<Sys_RoleAuth>()
+                        on a.Menu_Id equals b.Menu_Id
+                    where b.Role_Id == roleId //&& a.ParentId > 0
+                          && b.AuthValue != ""
+                    orderby a.ParentId
+                    select new Permissions
+                    {
+                        Menu_Id = a.Menu_Id,
+                        ParentId = a.ParentId,
+                        //2020.05.06增加默认将表名转换成小写，权限验证时不再转换
+                        TableName = (a.TableName ?? "").ToLower(),
+                        MenuAuth = a.Auth,
+                        UserAuth = b.AuthValue ?? "",
+                        // 2022.03.26增移动端加菜单类型
+                        MenuType = a.MenuType ?? 0
+                    }).ToList();
                 ActionToArray(_permissions);
                 string _version = cacheService.Get(roleKey);
                 //生成一个唯一版本号标识
@@ -300,6 +300,7 @@ namespace iMES.Core.ManageUser
                     //将版本号写入缓存
                     cacheService.Add(roleKey, _version);
                 }
+
                 //刷新当前服务器角色的权限
                 rolePermissions[roleId] = _permissions;
 
@@ -307,7 +308,6 @@ namespace iMES.Core.ManageUser
                 rolePermissionsVersion[roleId] = _version;
                 return _permissions;
             }
-
         }
 
         /// <summary>
@@ -335,12 +335,13 @@ namespace iMES.Core.ManageUser
         {
             return ExistsPermissions(tableName, actionPermission.ToString(), roleId);
         }
+
         public int UserId
         {
             get
             {
                 return (Context.User.FindFirstValue(JwtRegisteredClaimNames.Jti)
-                    ?? Context.User.FindFirstValue(ClaimTypes.NameIdentifier)).GetInt();
+                        ?? Context.User.FindFirstValue(ClaimTypes.NameIdentifier)).GetInt();
             }
         }
 
