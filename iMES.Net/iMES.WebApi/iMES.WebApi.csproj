@@ -32,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\iMes.Amzn\iMES.Amzn.csproj" />
     <ProjectReference Include="..\iMES.Builder\iMES.Builder.csproj" />
     <ProjectReference Include="..\iMES.Calendar\iMES.Calendar.csproj" />
     <ProjectReference Include="..\iMES.Core\iMES.Core.csproj" />

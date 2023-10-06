@@ -323,6 +323,10 @@ let viewgird = [
         path: '/Base_DesktopMenu',
         name: 'Base_DesktopMenu',
         component: () => import('@/views/custom/custom/Base_DesktopMenu.vue')
+    },{
+        path: '/Inventory_Summary',
+        name: 'Inventory_Summary',
+        component: () => import('@/views/amzn/identity_query/Inventory_Summary.vue')
     }]
 
 export default viewgird

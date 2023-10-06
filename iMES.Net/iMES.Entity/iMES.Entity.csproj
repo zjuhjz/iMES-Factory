@@ -35,6 +35,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DomainModels\ApiEntity\OutPut\" />
+    <Folder Include="Models\" />
   </ItemGroup>
 
 </Project>
