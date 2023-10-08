@@ -75,6 +75,8 @@ namespace iMES.Core.EFDbContext
                 Utilities.FileHelper.WriteFile(mapPath, $"syslog_{DateTime.Now.ToString("yyyyMMddHHmmss")}.txt",
                     ex.Message + ex.StackTrace + ex.Source);
             }
+
+            modelBuilder.Entity<InventorySummary>().ToTable("inventory_summary");
         }
     }
 }

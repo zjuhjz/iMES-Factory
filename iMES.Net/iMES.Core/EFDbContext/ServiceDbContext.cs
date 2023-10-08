@@ -5,6 +5,7 @@ using System.Text;
 using iMES.Core.DBManager;
 using iMES.Core.Extensions.AutofacManager;
 using iMES.Entity.SystemModels;
+using iMES.Entity.DomainModels;
 
 namespace iMES.Core.EFDbContext
 {
@@ -12,14 +13,16 @@ namespace iMES.Core.EFDbContext
     {
         protected override string ConnectionString
         {
-            get
-            {
-                return DBServerProvider.ServiceUserCurrnetConnectingString;
-            }
+            get { return DBServerProvider.ServiceUserCurrnetConnectingString; }
         }
-        public ServiceDbContext() : base() { }
 
-        public ServiceDbContext(DbContextOptions<BaseDbContext> options) : base(options) { }
+        public ServiceDbContext() : base()
+        {
+        }
+
+        public ServiceDbContext(DbContextOptions<BaseDbContext> options) : base(options)
+        {
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -28,8 +31,11 @@ namespace iMES.Core.EFDbContext
             optionsBuilder = optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             base.OnConfiguring(optionsBuilder);
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<InventorySummary>().ToTable("inventory_summary");
+
             base.OnModelCreating(modelBuilder, typeof(ServiceEntity));
         }
     }

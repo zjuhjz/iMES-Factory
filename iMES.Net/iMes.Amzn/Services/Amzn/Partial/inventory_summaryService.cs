@@ -21,7 +21,7 @@ using iMes.Amzn.IRepositories;
 
 namespace iMes.Amzn.Services
 {
-    public partial class inventory_summaryService
+    public partial class inventory_summaryService : ServiceBase<InventorySummary, IInventorySummaryRepository>
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IInventorySummaryRepository _repository; //访问数据库

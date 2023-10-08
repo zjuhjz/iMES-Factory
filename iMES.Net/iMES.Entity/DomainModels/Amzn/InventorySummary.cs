@@ -15,6 +15,7 @@ using iMES.Entity.SystemModels;
 namespace iMES.Entity.DomainModels
 {
     [Entity(TableCnName = "亚马逊ID查询", TableName = "amzv2.inventory_summary", DBServer = "SysDbContext")]
+    [Table("amzv2.inventory_summary")]
     public partial class InventorySummary : SysEntity
     {
         /// <summary>
@@ -35,7 +36,7 @@ namespace iMES.Entity.DomainModels
         [Column(TypeName = "varchar(36)")]
         [Editable(true)]
         [Required(AllowEmptyStrings = false)]
-        public Guid sellerSku { get; set; }
+        public string sellerSku { get; set; }
 
         /// <summary>
         ///fnSku
