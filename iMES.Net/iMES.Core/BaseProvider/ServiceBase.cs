@@ -251,6 +251,7 @@ namespace iMES.Core.BaseProvider
                 if (property == null) continue;
                 // property
                 //移除查询的值与数据库类型不匹配的数据
+                //e_ifox 类型校验
                 object[] values = property.ValidationValueForDbType(x.Value.Split(',')).Where(q => q.Item1).Select(s => s.Item3).ToArray();
                 if (values == null || values.Length == 0)
                 {
@@ -274,7 +275,7 @@ namespace iMES.Core.BaseProvider
         /// <returns></returns>
         public virtual PageGridData<T> GetPageData(PageDataOptions options)
         {
-            options = ValidatePageOptions(options, out IQueryable<T> queryable);
+             options = ValidatePageOptions(options, out IQueryable<T> queryable);
             //获取排序字段
             Dictionary<string, QueryOrderBy> orderbyDic = GetPageDataSort(options, TProperties);
 

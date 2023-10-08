@@ -33,7 +33,7 @@ namespace iMES.Entity.DomainModels
         [Key]
         [Display(Name = "sellerSku")]
         [MaxLength(20)]
-        [Column(TypeName = "varchar(36)")]
+        [Column(TypeName = "varchar(20)")]
         [Editable(true)]
         [Required(AllowEmptyStrings = false)]
         public string sellerSku { get; set; }
